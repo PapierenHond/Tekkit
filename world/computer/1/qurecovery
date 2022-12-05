@@ -1,0 +1,71 @@
+--Work in Progres - turtle recovery program
+
+local function yn(A)
+	if not A then return false end
+	local key
+	write(A.."[y/n]:")
+	while true do
+		_,key = os.pullEvent("key")
+		if key==21 then write(keys.getName(key).."\n") sleep(0.01) return true
+		elseif key==49 then write(keys.getName(key).."\n") sleep(0.01) return false
+		end
+	end
+end
+
+local function getpos()
+        local temp={}
+        while true do
+                print("Enter data from F3 Screen")
+                write("Please enter x coordinate:") temp.x=tonumber(read())
+                write("Please enter y coordinate:") temp.y=tonumber(read())
+                write("Please enter z coordinate:") temp.z=tonumber(read())
+                if temp.x and temp.y and temp.z then
+                        print("x:"..temp.x.." y:"..temp.y.." z:"..temp.z)
+                        if yn("Are thise correct?") then break end
+                end
+        end
+        return temp
+end
+
+local channel=15151
+modem=false
+for _,i in pairs(redstone.getSides()) do
+	if peripheral.isPresent(i) then
+		if peripheral.getType(i)=="modem" then
+			if peripheral.call(i,"isWireless") then
+			modem=peripheral.wrap(i)
+			--modem.open(channel)
+			break
+			end
+		end
+	end
+end
+local function transmit(...)
+if modem then modem.transmit(...) end
+end
+
+if turtle.getFuelLevel()<=2 then return false end
+--print("Give me coords in front of me")
+turtle.forward()
+local pos={gps.locate(2,true)}
+if pos[1] then
+	print("x:"..pos[1].." y:"..pos[2].." z:"..pos[3])
+	if not yn("Are thise correct?") then return false end
+	pos={x=pos[1],y=pos[2],z=pos[3]}
+else print("No gps online - Enter Scanner Position manualy") pos=getpos() end
+turtle.back()
+transmit(channel,4,"Pause") sleep(1) transmit(channel,6,textutils.serialize(pos))
+print("Recall in progress")
+
+turtle.select(1)
+turtle.dropDown()
+
+while true do
+if turtle.detect() then
+while turtle.suck() do turtle.dropDown() end
+	turtle.dig()
+	turtle.dropDown()
+else
+	sleep(1)
+end
+end

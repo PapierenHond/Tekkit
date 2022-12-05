@@ -1,0 +1,97 @@
+--Wojbie's Swarm Miner Main Program
+--This is a Top Level Overwrite that removed rednet api and coorutine from system
+--Also Contains Emergency Beacon that turns of if turtle crashes and drops to shell.
+--This should lessen load that turtles make on server by cutting amount of events by half
+--Top Level Coorutine Overwrite Downloaded from
+--http://www.computercraft.info/forums2/index.php?/topic/14785-a-smaller-top-level-coroutine-override/
+--This is part of set of programs
+--To get rest of them make instaler Floppy Disk by placing empty disc in disc drive and using pastebin get LXLBZK25 disk/startup
+
+--Setting up my globals table -- Mine Table no poking!!
+if not _G["wojbieGlobalsTable"] then
+_G["wojbieGlobalsTable"]={}
+end
+
+-- if redner exists preform overwrite and load up beacon
+if _G['rednet'] then
+
+	local function beacon()
+		local channel=15151
+		local modem=false
+		local pos=false
+		local bep=os.startTimer(1)
+		local message={["run"]=false,["id"]=os.getComputerID(),["ERROR"]=true}
+		local tosend=textutils.serialize(message)
+		local function transmit(...) if modem then modem.transmit(...) end end
+		for _,i in pairs(redstone.getSides()) do
+			if peripheral.isPresent(i) then
+				if peripheral.getType(i)=="modem" then
+					modem=peripheral.wrap(i)
+						if modem["isWireless"] then
+							if modem.isWireless() then
+								modem.open(channel)
+								break
+							end
+						else
+							modem.open(channel)
+							break
+						end
+					modem=false
+				end
+			end
+		end
+		while true do
+			event={os.pullEventRaw()}
+			if event[1]=="timer" then
+				if event[2]==bep then
+					if wojbieGlobalsTable.getTopShellRunningProgram then
+						if wojbieGlobalsTable.getTopShellRunningProgram() then
+							bep=os.startTimer(10)
+						else
+							if not message.pos then local temp temp={gps.locate(2)} message.pos={x=temp[1],y=temp[2],z=temp[3]} tosend=textutils.serialize(message) end
+							transmit(channel,1,tosend)
+							bep=os.startTimer(2)
+						end
+					else
+						bep=os.startTimer(10)
+					end
+				end
+			end
+		end
+	end
+
+--top level overwrite start here
+	--# this would also cause the shell and rednet routine to stop
+	os.startTimer(0)
+	coroutine.yield('timer')
+
+	os.queueEvent("modem_message")
+	local p = _G.printError
+	function _G.printError()
+		_G.printError = p
+		_G['rednet'] = nil
+		print("OK")
+		
+		local ok, err = pcall( function()
+			parallel.waitForAny(function() os.run({}, "/rom/programs/shell") end,beacon)
+		end )
+		-- If the shell errored, let the user read it.
+		if not ok then
+			printError( err )
+		end
+		pcall( function()
+			term.setCursorBlink( false )
+			print( "Press any key to continue" )
+			os.pullEvent( "key" ) 
+		end )
+		os.shutdown()
+	end
+		
+else -- if not give beacon shell function it needs and act like normal shell startup code
+	wojbieGlobalsTable.getTopShellRunningProgram = shell.getRunningProgram
+	if turtle then
+		shell.run("/swarminer")
+	else
+		shell.run("/scanner")
+	end
+end

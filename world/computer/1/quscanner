@@ -1,0 +1,400 @@
+--Wojbie's Swarm Miner Wireless Scaner
+--Displays arr turtles in its range and what they are doing
+--Range depends on weather and height of placement
+--This is part of set of programs
+--To get rest of them make instaler Floppy Disk by placing empty disc in disc drive and using pastebin get LXLBZK25 disk/startup
+
+local tArgs = {...}
+
+local usegps=true
+local pos=nil
+local terminate=false
+
+local channel=15151
+local drawmap=true
+local modem=false
+local order=nil
+local toggle=false
+local currents={}
+local current={}
+local wipedzone={["repeats"]={["x"]=1,["z"]=1,},["manpos"]={["y"]=0,["x"]=0,["z"]=0,["zd"]=0,["xd"]=0,},["start"]={["y"]=0,["x"]=0,["z"]=0,["zd"]=0,["xd"]=0,},["map"]={[1]={[1]="?",},},["zone"]={},["size"]={["z"]=0,["y"]=0,["x"]=0,},}
+
+--map handling
+
+local function Rev(A)  --reverses table function - keys for values and vice versa
+	local Revt={}
+	for i,j in pairs(A) do
+		Revt[j]=i
+	end
+	return Revt
+end
+
+local mapmark={".","+","#"}
+local krampam=Rev(mapmark)
+
+-- Yes/No Questions
+
+local function yn(A)
+	if not A then return false end
+	local key
+	write(A.."[y/n]:")
+	while true do
+		_,key = os.pullEvent("key")
+		if key==21 then write(keys.getName(key).."\n") sleep(0.01) return true
+		elseif key==49 then write(keys.getName(key).."\n") sleep(0.01) return false
+		end
+	end
+end
+
+--Asking for position
+ 
+local function getpos()
+        local temp={}
+        while true do
+                print("Enter data from F3 Screen")
+                write("Please enter x coordinate:") temp.x=tonumber(read())
+                write("Please enter y coordinate:") temp.y=tonumber(read())
+                write("Please enter z coordinate:") temp.z=tonumber(read())
+                if temp.x and temp.y and temp.z then
+                        print("x:"..temp.x.." y:"..temp.y.." z:"..temp.z)
+                        if yn("Are thise correct?") then break end
+                end
+        end
+        return temp
+end
+ 
+
+--File Useage
+
+local function save(A,B) local file = fs.open(tostring(A),"w") file.write(B) file.close() end
+local function saveT(A,B) save(A,textutils.serialize(B)) end
+local function saveTH(A,B) save(A,string.gsub(textutils.serialize(B),"},","},\r\n")) end
+local function get(A) local file = fs.open(tostring(A),"r") if not file then return false end local data = file.readAll() file.close() if data then return data end end
+local function getT(A) local data = get(A) if data then data = textutils.unserialize(data) end if data then return data end end
+
+local status=""
+
+current.loc={x=1,z=1}
+current.pos=0
+local onmap=true
+
+--modem connection
+local modem=false
+for _,i in pairs(redstone.getSides()) do
+	if peripheral.isPresent(i) then
+		if peripheral.getType(i)=="modem" then
+			modem=peripheral.wrap(i)
+				if modem["isWireless"] then
+					if modem.isWireless() then
+						modem.open(channel)
+						break
+					end
+				else
+					modem.open(channel)
+					break
+				end
+			modem=false
+		end
+	end
+end
+
+--monitor finding
+local screen=false
+for _,i in pairs(redstone.getSides()) do
+	if peripheral.isPresent(i) then
+		if peripheral.getType(i)=="monitor" then
+			screen=peripheral.wrap(i)
+			local i,k=screen.getSize()
+			for j=0.5,5,0.5 do
+				screen.setTextScale(j)
+				i,k=screen.getSize()
+				if i<5 or k<3 then screen.setTextScale(j-0.5) break end				
+			end
+			break
+		end
+	end
+end
+
+local function transmit(...)
+if modem then modem.transmit(...) end
+end
+
+local function howmuch(A)
+local i=0
+for _,_ in pairs(A) do
+i=i+1
+end
+return i
+end
+
+local function prepMess()
+local Out={}
+local k,j
+for k,j in pairs(currents) do
+	if type(j.dist)=="number" and os.clock()-currents[k].atime < 5 then
+		Out[k]=j
+	end
+end
+return textutils.serialize(Out)
+end
+
+local function incMess(A)
+if not A then return false end
+local k,j
+	for k,j in pairs(A) do
+		j.dist="EX"
+		j.atime=os.clock()
+		if currents[k] then
+			if os.clock()-currents[k].atime > 5 then currents[k]=j end
+		else
+			currents[k]=j
+		end
+	end
+end
+
+local function xtface(A,B)
+if A==0 and B==1 then return 0
+elseif A==-1 and B==0 then return 1
+elseif A==0 and B==-1 then return 2
+elseif A==1 and B==0 then return 3 end
+return -1
+end
+
+local function ordstat()
+	if not order then return end
+	order.stats={}
+	for i=1,#mapmark do
+		order.stats[mapmark[i]]=0
+	end
+	for i=1,order.repeats.x do
+		for k=1,order.repeats.z do
+			order.stats[order.map[i][k]]=order.stats[order.map[i][k]]+1
+		end
+	end
+	for i=1,#mapmark do
+		order.stats[mapmark[i]]=math.floor((order.stats[mapmark[i]]/(order.repeats.x*order.repeats.z)*100)+0.5)
+	end
+
+end
+
+local function monitor()
+
+	local function wmap(A,B)
+		if current.loc and current.loc.x==A and current.loc.z==B then
+			term.setTextColor(colors.black)
+			term.setBackgroundColor(colors.white)
+			write(order.map[A][B])
+			term.setTextColor(colors.white)
+			term.setBackgroundColor(colors.black)
+		else
+			write(order.map[A][B])
+		end
+	end
+	
+	local function onscreen()
+		if screen then
+		for i=1,#mapmark do
+			screen.setCursorPos(1,i)
+			screen.write(mapmark[i])
+			local temp=order.stats[mapmark[i]]
+			if temp<10 then screen.write("  "..temp.."%")
+			elseif temp<100 then screen.write(" "..temp.."%")
+			else screen.write(""..temp.."%")			
+			end
+		end
+	end
+	
+	end
+
+	local i,k,j,l,ioff,idraw
+	local m=1
+	term.clear()
+	term.setCursorPos(1,17)
+	write("T-Toggle")
+	term.setCursorPos(1,18)
+	write("P-Pause")
+	term.setCursorPos(1,19)
+	write("O-UnPause")
+	term.setCursorPos(1,1)	
+	while true do 
+		if order then
+			if drawmap then
+				onscreen()
+				drawmap=false
+				if order.repeats.z < 13 or not current.loc then l=0 else l=math.max( math.min(order.repeats.z-13,current.loc.z-7),0) end
+				if order.repeats.x < 13 or not current.loc then j=0 else j=math.max(math.min(order.repeats.x-13,current.loc.x-7),0) end
+
+				for i=1,math.min(order.repeats.x,13) do
+					term.setCursorPos(1,14-i)
+					for k=1,math.min(order.repeats.z,13) do
+							wmap(i+j,k+l)
+					end
+				end
+
+				for i=1,19 do
+					term.setCursorPos(14,i)	
+					write("|")
+				end
+
+				for i=1,13 do
+					term.setCursorPos(i,14)	
+					write("-")
+				end
+
+				term.setCursorPos(14,14)	
+				write("+")
+			end
+		else 
+			term.setCursorPos(1,1)	
+			write("Scanning")
+			for k=1,m do write(".") end
+			for k=4-m,1,-1 do write(" ") end
+			m=m+1
+			if m>4 then m=1 end
+		end
+		
+			i=1
+			ioff=howmuch(currents)
+			term.setTextColor(colors.white)
+			term.setBackgroundColor(colors.black)
+			term.setCursorPos(1,15) for l=1,13 do write(" ") end term.setCursorPos(1,15)
+			if current.loc then write("Sector:"..current.loc.x.."x"..current.loc.z) end
+			term.setCursorPos(1,16) for l=1,13 do write(" ") end term.setCursorPos(1,16)
+			write(current.pos.."/"..ioff)
+			if ioff < 19 then ioff=0 else ioff=math.max(math.min(ioff-19,current.pos-9),0) end
+			for k,j in pairs(currents) do
+
+				if j.loc and onmap then
+					if current.loc.x==j.loc.x and current.loc.z==j.loc.z then
+					term.setTextColor(colors.black)
+					term.setBackgroundColor(colors.white)
+					current.pos=i
+					end
+				end
+				
+				if not onmap and current.pos==i then
+					term.setTextColor(colors.black)
+					term.setBackgroundColor(colors.white)
+					if j.loc then if current.loc~=j.loc then current.loc.x=j.loc.x current.loc.z=j.loc.z drawmap=true end else current.loc={x=0,z=0} end
+				end
+					
+				if i >ioff and i<=19+ioff  then
+					idraw=i-ioff
+					--numbers
+						term.setCursorPos(15,idraw)
+						for l=0,51-15 do write(" ")	end
+						term.setCursorPos(15,idraw)
+						if j.id<10 then write("   "..j.id..":")
+						elseif j.id<100 then write("  "..j.id..":")
+						elseif j.id<1000 then write(" "..j.id..":")
+						else write(j.id..":") end
+					--data
+					if not toggle then
+						if j.run then write("M") elseif j.ERROR then write("E")	else write("S") end
+						if j.pos and j.pos.x and j.pos.y and j.pos.z then
+							write(" "..j.pos.x..":"..j.pos.y..":"..j.pos.z)
+							if j.pos.xd and j.pos.zd then write(" f:"..xtface(j.pos.xd,j.pos.zd)) end
+						end
+						if j.loc then write(" S:"..j.loc.x.."x"..j.loc.z) end
+						if j.layer then write(" "..j.layer) end
+						if j.ERROR then write(" ERROR") end
+					else
+						if j.fuel then write(" Fuel:"..j.fuel) end
+						write(" Dist:"..j.dist)
+						write(" Time:"..math.floor(os.clock()-j.atime))
+					end
+				end
+				
+				term.setTextColor(colors.white)
+				term.setBackgroundColor(colors.black)
+				i=i+1
+			end
+			
+			for j=i,19,1 do
+				term.setCursorPos(15,j)
+				for l=0,51-15 do write(" ")	end
+			end
+
+			sleep(0.2)
+	end
+	print("I should not get printed")
+end
+
+--Wireless Part
+
+
+local function wireless()
+	local event={}
+	local clear --=os.startTimer(60)
+	local spread=os.startTimer(5)
+	local temp
+	while true do
+		event={os.pullEvent()}
+		if event[1]=="modem_message" then
+			if event[3]==channel then
+				if event[4]==1 then
+					temp=textutils.unserialize(event[5])
+					if temp then currents[temp.id]=temp currents[temp.id].dist=math.floor(event[6]) currents[temp.id].atime=os.clock() end
+				elseif event[4]==2 then
+					temp=textutils.unserialize(event[5])
+					if temp then order=temp ordstat() drawmap=true end
+				elseif event[4]==10 then
+					temp=textutils.unserialize(event[5])
+					if temp then incMess(temp) end
+				end
+			elseif event[3]==gps.CHANNEL_GPS and usegps then transmit(event[4], gps.CHANNEL_GPS, textutils.serialize({pos.x,pos.y,pos.z})) end
+		elseif event[1]=="char" then
+			--if event[2]=="q" then transmit(channel,channel,"Terminate") status="Terminating"
+			if event[2]=="t" or event[2]=="T" then toggle=not toggle status="Toggle" 
+			elseif event[2]=="p" or event[2]=="P" then transmit(channel,4,"Pause") status="Pausing" 
+			elseif event[2]=="o" or event[2]=="O" then transmit(channel,5,"UnPause") status="UnPausing" end
+		elseif event[1]=="key"  and order then	
+			if     event[2]==200 then onmap=true current.pos=0 current.loc.x=math.min(current.loc.x+1,order.repeats.x) drawmap=true
+			elseif event[2]==208 then onmap=true current.pos=0 current.loc.x=math.max(current.loc.x-1,1) drawmap=true
+			elseif event[2]==205 then onmap=true current.pos=0 current.loc.z=math.min(current.loc.z+1,order.repeats.z) drawmap=true
+			elseif event[2]==203 then onmap=true current.pos=0 current.loc.z=math.max(current.loc.z-1,1) drawmap=true
+			elseif event[2]==209 or event[2]==31 then onmap=false current.loc={x=0,z=0} current.pos=math.min(current.pos+1,howmuch(currents)) drawmap=true
+			elseif event[2]==201 or event[2]==17 then onmap=false current.loc={x=0,z=0} current.pos=math.max(current.pos-1,1) drawmap=true end
+		elseif event[1]=="timer" then
+			if     event[2]==clear then clear=os.startTimer(60) currents={} --unused old code - left for future posibilites.
+			elseif event[2]==spread then  spread=os.startTimer(5) transmit(channel,10,prepMess()) end
+		elseif event[1]=="terminate" then
+			terminate=true
+			print("Terminate Event")
+			break
+		end
+	end
+end
+
+if #tArgs>=0 then
+	if tArgs[1]=="help" or tArgs[1]=="?" then print("Emergency/WipeOrder/Goto") return true
+elseif tArgs[1]=="Emergency" then transmit(channel,channel,"Terminate") print("Terminating All in Range") return true
+elseif tArgs[1]=="WipeOrder" then transmit(channel,4,"Pause") sleep(1) transmit(channel,7,textutils.serialize(wipedzone))  print("Orders Wiped All in Range") return true
+elseif tArgs[1]=="Goto" then transmit(channel,4,"Pause") sleep(1) print("Enter Goto Target:")  transmit(channel,6,textutils.serialize(getpos()))  print("Goto Orders Sent to All in Range") return true
+	end
+end
+
+sleep(0.01)
+os.setComputerLabel("Swarminer Scanner id:"..os.getComputerID())
+pos=getT("/gps.log")
+if pos then
+	usegps=true if modem then modem.open(gps.CHANNEL_GPS) end
+else
+	usegps=false if modem then modem.close(gps.CHANNEL_GPS) end
+end
+transmit(channel,3,"Order?")
+
+--non termination point
+
+local oldpullEvent=os.pullEvent
+os.pullEvent=os.pullEventRaw
+
+repeat
+
+transmit(channel,3,"Order?")
+parallel.waitForAny(monitor,wireless)
+
+until terminate
+
+--Restoring normal termination
+os.pullEvent=oldpullEvent

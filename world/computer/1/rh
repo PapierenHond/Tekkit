@@ -1,0 +1,843 @@
+----------------------------------------------------------
+--                      Name: dig                       --
+----------------------------------------------------------
+--                   Version: 0.2.17                    --
+----------------------------------------------------------
+--                    Author: Eonsv                     --
+----------------------------------------------------------
+--The program clears an area of size x, y of all ores by--
+--making the turtle to dig in the continous pattern     --
+--. X . . . . X . . .                                   --
+--. . . . X . . . . X                                   --
+--. . X . . . . X . .                                   --
+--X . . . . X . . . .                                   --
+--. . . X . . . . X .                                   --
+--. X . . . . X . . .                                   --
+--. . . . X . . . . X                                   --
+--. . X . . . . X . .                                   --
+--X . . . . X . . . .                                   --
+--. . . X . . . . X .                                   --
+--until hitting bedrock, and checking walls for ores.   --
+--It will dispose items to an enderchest when reaching  --
+--full inventory. Theres options for automatic fueling, --
+--filling in the holes, and configurable number of      --
+--blocks to avoid.                                      --
+----------------------------------------------------------
+
+------------
+--INCLUDES--
+------------
+
+--Tests wether a file with the filename name exists. Returns true if it does and false if not
+function fileExists(name)
+   local f = io.open(name,'r');
+   if (f ~= nil) then
+		f:close();
+		return true;
+	else
+		return false;
+	end;
+end;
+
+--Downloads and installs the ProtLib API.
+if(not fileExists('ProtLib')) then
+	shell.run('pastebin', 'get', 's8GSFZrU', 'ProtLib');
+end;
+os.loadAPI('ProtLib');
+
+--Downloads the startup program
+if(not fileExists('startup')) then
+	shell.run('pastebin', 'get', 'CDCELxfj', 'startup');
+end;
+
+-------------
+--VARIABLES--
+-------------
+--Commandline arguments
+local arg = {...};
+
+if(arg[1] == 'inventory') then
+	print('Slot 1: Enderchest for automatic item disposal.');
+	print('Slot 2: Fuel for automatic refueling.');
+	print('Slot 3: Materials to be used for filling in holes.');
+	print('Slot 4-15: Blocks to ignore.');
+	print('Slot 16: Empty.');
+	do return end;
+end;
+
+--If wrong number of arguments
+for i = 1, 3 do
+	if(arg[i] == nil) then
+		print('Usage: dig <length> <width> <[left]/[right]> <y coordinate(optional)>');
+		print('The y coordinate is only used when prefueling is used.');
+		print('For how to setup inventory, use: dig <inventory>');
+		do return end;
+	end;
+end;
+
+--current x, y, z position, x and y size of the quarry, going right or left.
+local x, y, z, X, Y, lr;
+--Pattern matrix, size of pattern, current state, rebooting.
+local A0, N, state, reboot;
+--Automatic disposal, number of blocks to avoid, automatic fueling, slot number of first and last block to avoid.
+local automatic, avoid, autofuel, favoid, lavoid;
+--The z coordinate of top of the hole, wether to plug the hole or not
+local top, plug;
+--Slot number of the materials to plug the hole with, slot number of the fuel
+local plugSlot, fuelSlot;
+
+--Initialzing the dig pattern. Makes an array of size 5x5 with indices 0 to 4.
+N = 5;
+A0 = {	{0, 1, 0, 0, 0},
+		{0, 0, 0, 0, 1},
+		{0, 0, 1, 0, 0},
+		{1, 0, 0, 0, 0},
+		{0, 0, 0, 1, 0}};
+
+A0[0] = {};
+for i = 0, 4 do
+	for j = 0, 4 do
+		A0[i][j] = A0[i + 1][j + 1];
+	end;
+end;
+A0[5] = nil;
+for i = 0, 4 do
+	A0[i][5] = nil;
+end
+
+--X size
+X = tonumber(arg[1]);
+
+--Y size
+Y = tonumber(arg[2]);
+
+--Starting to move to the left or right depending on the third input
+if(arg[3] == 'left' or arg[3] == 'l' or arg[3] == 'L') then
+	lr = 1;
+elseif(arg[3] == 'right' or arg[3] == 'r' or arg[3] == 'R') then
+	lr = -1;
+else
+	lr = tonumber(arg[3]);
+	if(lr > 0) then
+		lr = 1;
+	else
+		lr = -1;
+	end;
+end;
+
+--Test to check if wether the program has rebooted
+if(arg[5] == nil) then
+	x = 0;
+	y = 0;
+	z = 0;
+	state = 0;
+	ProtLib.setPos();
+	reboot = false;
+	top = 1;
+else
+	x = tonumber(arg[4]);
+	y = tonumber(arg[5]);
+	z = tonumber(arg[6]);
+	state = tonumber(arg[7]);
+	ProtLib.setPos(x, y, z, tonumber(arg[8]));
+	reboot = true;
+	automatic = (arg[9] == '1');
+	avoid = tonumber(arg[10]);
+	autofuel = (arg[11] == '1');
+	top = tonumber(arg[12]);
+	plug = (arg[13] == '1');
+	if(avoid == 0) then
+		favoid = 0;
+		lavoid = 4;
+		if(not automatic) then
+			lavoid = lavoid - 1;
+		end;
+		if(not autofuel) then
+			lavoid = lavoid - 1;
+		end;
+		if(not plug) then
+			lavoid = lavoid - 1;
+		end;
+	else
+		favoid = 4;
+		if(not automatic) then
+			favoid = favoid - 1;
+		end;
+		if(not autofuel) then
+			favoid = favoid - 1;
+		end;
+		if(not plug) then
+			favoid = favoid - 1;
+		end;
+		lavoid = favoid + avoid - 1;
+	end;
+	fuelSlot = 2;
+	if(not automatic) then
+		fuelSlot = fuelSlot - 1;
+	end;
+	plugSlot = 3;
+	if(not automatic) then
+		plugSlot = plugSlot - 1;
+	end;
+	if(not autofuel) then
+		plugSlot = plugSlot - 1;
+	end;
+end;
+
+-------------
+--FUNCTIONS--
+-------------
+--Finds fuel and places it in the fuel slot
+local function findFuel()
+	if(not autofuel) then
+		return true;
+	end;
+	--Finds fuel in inventory and puts it in the fuel slot
+	turtle.select(fuelSlot);
+	if(turtle.getItemSpace(fuelSlot) > 0) then
+		for i = lavoid + 1, 16 do
+			--Stops if fuel slot is full.
+			if(turtle.getItemSpace(fuelSlot) == 0) then
+				break;
+			end;
+			if(turtle.compareTo(i)) then
+				turtle.select(i);
+				turtle.transferTo(fuelSlot);
+				turtle.select(fuelSlot);
+			end;
+		end;
+	end;
+	turtle.select(lavoid + 1);
+end;
+
+--Saves current progress to file
+function save(dr)
+	if(dr == nil) then
+		dr = 0;
+	end;
+	local str = '';
+	str = str..X..'\n';
+	str = str..Y..'\n';
+	str = str..lr..'\n';
+	str = str..x..'\n';
+	str = str..y..'\n';
+	str = str..z..'\n';
+	str = str..state..'\n';
+	str = str..ProtLib.getRot() + dr..'\n';
+	if(automatic) then
+		str = str..'1'..'\n';
+	else
+		str = str..'0'..'\n';
+	end;
+	str = str..avoid..'\n';
+	if(autofuel) then
+		str = str..'1'..'\n';
+	else
+		str = str..'0'..'\n';
+	end;
+	str = str..top..'\n';
+	if(plug) then
+		str = str..'1'..'\n';
+	else
+		str = str..'0'..'\n';
+	end;
+	local file = io.open('save', 'w');
+	file:write(str);
+	file:close();
+end;
+
+--Clears the inventory by placing the enderchest from slot 1 above the turtle,
+--and disposing all mined items to this one.
+local function dump()
+	findFuel();
+	--Drops all unwanted blocks
+	if(favoid > 0) then
+		for i = favoid, lavoid do
+			turtle.select(i);
+			for j = lavoid + 1, 16 do
+				if(turtle.compareTo(j)) then
+					turtle.select(j);
+					turtle.dropDown();
+					turtle.select(i);
+				end;
+			end;
+		end;
+		turtle.select(lavoid + 1);
+	end;
+	--Not automated
+	if(not automatic) then
+		local filled = 0;
+		for i = lavoid + 1, 16 do
+			if(turtle.getItemCount(i) > 0) then
+				filled = filled + 1;
+			end;
+		end;
+		while(filled > 0) do
+			sleep('Empty slot '..favoid..' to '..lavoid, 10);
+			filled = 0;
+			for i = lavoid + 1, 16 do
+				if(turtle.getItemCount(i) > 0) then
+					filled = filled + 1;
+				end;
+			end;
+		end;
+	else
+		--Clears space above the turtle for placing a block.
+		if(turtle.detectUp()) then
+			ProtLib.digUp();
+		end;
+		--Places the enderchest
+		turtle.select(1);
+		while(not turtle.placeUp()) do
+			turtle.attackUp();
+		end;
+		--Dumps items to the chest
+		for i = lavoid + 1, 16 do
+			if(turtle.getItemCount(i) > 0) then
+				turtle.select(i);
+				--Displays an error message if the chest is full
+				while(not turtle.dropUp()) do
+					sleep('Unable to dispose items to the chest.', 10);
+				end;
+			end;
+		end;
+		--Picks up the enderchest
+		turtle.select(1);
+		ProtLib.digUp();
+		--Selects first empty slot
+		turtle.select(lavoid + 1);
+	end;
+end;
+
+--Tests if the inventory is full, and dumps items if it is.
+local function dispose()
+	local empty = 0;
+	--Calculates number of empty slots
+	for i = lavoid + 1, 16 do
+		if(turtle.getItemCount(i) == 0) then
+			empty = empty + 1;
+		end;
+	end;
+	--Dumps items if the inventory is full
+	if(empty == 0) then
+		dump();
+		clear();
+		print('Disposal of inventory complete.');
+	end;
+end;
+
+--Refuels until the fuel level is at or above fuel.
+local function refuel(fuel)
+	if(turtle.getFuelLevel() >= fuel) then
+		return true;
+	end;
+	if(not autofuel) then
+		while(turtle.getFuelLevel() < fuel) do
+			sleep('Error: The y coordinate input was incorrect.\nInsert a stack of fuel in slot 16.', 30);
+			turtle.select(16);
+			turtle.refuel();
+			turtle.select(lavoid + 1);
+		end;
+		return true;
+	end;
+	--Refuling until the fuel level has reached the input, and leaving 1 fuel item in the fuel slot.
+	turtle.select(fuelSlot);
+	if(turtle.getItemCount(fuelSlot) > 1) then
+		turtle.refuel(1);
+	end;
+	while(turtle.getFuelLevel() < fuel) do
+		findFuel();
+		if(turtle.getItemCount(fuelSlot) > 1) then
+			turtle.refuel(1);
+		end;
+		while(turtle.getFuelLevel() < fuel and turtle.getItemCount(fuelSlot) < 2) do
+			sleep('Insert more fuel.', 10);
+		end;
+	end;
+	findFuel();
+	turtle.select(lavoid + 1);
+end;
+
+--Moves to the position x + dx, y + dy, z + dz, where x, y, z is the current position.
+--It will toss away unwanted blocks.
+local function move(dx, dy, dz)
+	if(automatic) then
+		while(turtle.getItemCount(1) == 0) do
+			sleep('Something went terribly wrong, and I lost the chest. Place it in slot 1.', 10);
+		end;
+	end;
+	if(turtle.getItemCount(16) > 0) then
+		dispose();
+	end;
+	x = x + dx*dx;
+	y = y + dy*dy;
+	z = z + dz;
+	save();
+	turtle.select(16);
+	test = ProtLib.moveRel(dx, dy, dz);
+	--Filling up filler blocks
+	if(plug and turtle.compareTo(plugSlot) and turtle.getItemSpace(plugSlot) > 0) then
+		turtle.transferTo(plugSlot);
+	end;
+	--Disposing of unwanted blocks
+	if(turtle.getItemCount(16) > 0 and favoid > 0) then
+		for i = favoid, lavoid do
+			if(turtle.compareTo(i)) then
+				turtle.dropDown();
+				break;
+			end;
+		end;
+	end;
+	--Cleaning up inventory
+	if(turtle.getItemCount(16) > 0) then
+		for i = lavoid + 1, 15 do
+			if(turtle.compareTo(i)) then
+				turtle.transferTo(i);
+				if(turtle.getItemCount(16) == 0) then
+					break;
+				end;
+			elseif(turtle.getItemCount(i) == 0) then
+				turtle.transferTo(i);
+				break;
+			end;
+		end;
+	end;
+	turtle.select(lavoid + 1);
+	--The turtle will never be ordered to move into bedrock,
+	--therefore it's forced to move until it's able to.
+	if(not test) then
+		move(dx, dy, dz);
+	end;
+end;
+
+--Digs the block below. Returns true if successful, and false if the block is bedrock.
+--It will toss away unwanted blocks
+local function digDownTest()
+	local test;
+	if(turtle.getItemCount(16) > 0) then
+		dispose();
+	end;
+	turtle.select(16);
+	test = ProtLib.digDown();
+	--Filling up filler blocks
+	if(plug and turtle.compareTo(plugSlot) and turtle.getItemSpace(plugSlot) > 0) then
+		turtle.transferTo(plugSlot);
+	end;
+	--Disposing of unwanted blocks
+	if(turtle.getItemCount(16) > 0 and favoid > 0) then
+		for i = favoid, lavoid do
+			if(turtle.compareTo(i)) then
+				turtle.dropDown();
+				break;
+			end;
+		end;
+	end;
+	--Cleaning up inventory
+	if(turtle.getItemCount(16) > 0) then
+		for i = lavoid + 1, 15 do
+			if(turtle.compareTo(i)) then
+				turtle.transferTo(i);
+				if(turtle.getItemCount(16) == 0) then
+					break;
+				end;
+			elseif(turtle.getItemCount(i) == 0) then
+				turtle.transferTo(i);
+				break;
+			end;
+		end;
+	end;
+	turtle.select(lavoid + 1);
+	dispose();
+	return test;
+end;
+
+--Rotates relative to the current rotation.
+rotate = ProtLib.rotate;
+
+--Clears the screen, and sets the cursor at the top left of the screen.
+function clear()
+	term.clear();
+	term.setCursorPos(1, 1);
+end;
+
+--Sleeps time seconds, while displaying the message text and counting down.
+function sleep(text, time)
+	for i = 0, time - 1 do
+		clear();
+		print(text);
+		print('Countdown: '..time - i..'s.');
+		os.sleep(1);
+	end;
+	clear();
+end;
+
+--Cleans up the inventory by placeing all empty slots at the bottom of the inventory.
+function cleanUp()
+	if(not automatic) then
+		if(not autofuel) then
+			turtle.select(3);
+			turtle.transferTo(1);
+		else
+			turtle.select(2);
+			turtle.transferTo(1);
+			turtle.select(3);
+			turtle.transferTo(2);
+		end;
+	elseif(not autofuel) then
+		turtle.select(3);
+		turtle.transferTo(2);
+	end;
+	if(favoid > 0) then
+		for i = favoid, 15 do
+			if(turtle.getItemCount(i) == 0) then
+				for j = 16, i + 1, -1 do
+					if(turtle.getItemCount(j) > 0) then
+						turtle.select(j);
+						turtle.transferTo(i);
+						break;
+					end;
+				end;
+			end;
+		end;
+	end;
+	
+	turtle.select(lavoid + 1);
+end;
+
+--Initializes the turtle by determining automatic fueling, disposing of items,
+--number of blocks to avoid and what type of blocks to fill in holes with.
+function init()
+	while(turtle.getItemCount(1) > 1) do
+		sleep('Wrong number of items in slot 1. Needs to be 1 or 0.', 5);
+	end;
+	
+	automatic = (turtle.getItemCount(1) == 1);
+	autofuel = (turtle.getItemCount(2) > 0 and arg[4] == nil)
+	plug = (turtle.getItemCount(3) > 0);
+	
+	if(not autofuel and turtle.getItemCount(2) > 0) then
+		turtle.select(2);
+		turtle.refuel();
+		turtle.drop();
+		turtle.select(1);
+	end;
+	
+	while(autofuel and turtle.getItemSpace(2) > 0) do
+		sleep('Insert a whole stack of fuel in slot 2.', 5);
+	end;
+	while(plug and turtle.getItemSpace(3) > 0) do
+		sleep('Insert a whole stack of blocks in slot 3.', 5);
+	end;
+	
+	for i = 4, 15 do
+		while(turtle.getItemCount(i) > 1) do
+			sleep('Wrong number of items in slot '..i..'.Needs to be 1 or 0.', 5);
+		end;
+	end;
+	
+	while(turtle.getItemCount(16) > 0) do
+		sleep('Slot 16 needs to be empty.', 5);
+	end;
+	
+	avoid = 0;
+	for i = 4, 15 do
+		if(turtle.getItemCount(i) > 0) then
+			avoid = avoid + 1;
+		end;
+	end;
+	
+	--If there is no blocks to avoid
+	if(avoid == 0) then
+		favoid = 0;
+		lavoid = 4;
+		if(not automatic) then
+			lavoid = lavoid - 1;
+		end;
+		if(not autofuel) then
+			lavoid = lavoid - 1;
+		end;
+		if(not plug) then
+			lavoid = lavoid - 1;
+		end;
+	else
+		--Places the first block to avoid in the first empty slot.
+		favoid = 4;
+		if(not autofuel) then
+			favoid = favoid - 1;
+		end;
+		if(not automatic) then
+			favoid = favoid - 1;
+		end;
+		if(not plug) then
+			favoid = favoid - 1;
+		end;
+		lavoid = favoid + avoid - 1;
+	end;
+	fuelSlot = 2;
+	if(not automatic) then
+		fuelSlot = fuelSlot - 1;
+	end;
+	plugSlot = 3;
+	if(not automatic) then
+		plugSlot = plugSlot - 1;
+	end;
+	if(not autofuel) then
+		plugSlot = plugSlot - 1;
+	end;
+	
+	cleanUp();
+	
+	if(not autofuel) then
+		local fuel = X*Y - 1;
+		local ycoord;
+		clear();
+		ycoord = tonumber(arg[4]);
+		if(ycoord == nil) then
+			print('Enter y coordinate:');
+			ycoord = read();
+		end;
+		local holes = 0;
+		for i = 0, X - 1 do
+			for j = 0, Y - 1 do
+				holes = holes + A0[i%N][j%N];
+			end;
+		end;
+		
+		fuel = fuel + 2*holes*(ycoord - 2);
+		while(turtle.getFuelLevel() < fuel) do
+			sleep('Refueling:', 10);
+			for i = lavoid + 1, 16 do
+				turtle.select(i);
+				turtle.refuel();
+			end;
+		end;
+		turtle.select(lavoid + 1);
+	end;
+	--Info output
+	local str1, str2, str3;
+	if(automatic) then
+		str1 = 'automatic disposal of inventory';
+	else
+		str1 = 'manual disposal of inventory';
+	end;
+	if(autofuel) then
+		str2 = 'automatic refueling';
+	else
+		str2 = 'fueling at start';
+	end;
+	if(plug) then
+		str3 = 'fill holes';
+	else
+		str3 = 'leave holes empty';
+	end;
+	sleep('Using '..str1..' and '..str2..'. Avoiding '..avoid..' number of blocks. Will '..str3..'.', 5);
+end;
+
+--Moves up until reaching initial height
+function moveUp()
+	local function fillInHole()
+		if(z == top - 1) then
+			turtle.select(plugSlot);
+			while(turtle.getItemCount(plugSlot) < 2) do
+				sleep('Insert more fill blocks.', 10);
+			end;
+			--Places a block
+			if(not turtle.detect()) then
+				while(not turtle.place()) do
+					turtle.attack();
+				end;
+			end;
+			for i = 1, 3 do
+				save(1);
+				rotate(1);
+				if(turtle.detect()) then
+					break;
+				end;
+				while(turtle.getItemCount(plugSlot) < 2) do
+					sleep('Insert more fill blocks.', 10);
+				end;
+				--Places a block
+				while(not turtle.place()) do
+					turtle.attack();
+				end;
+			end;
+			turtle.select(lavoid + 1);
+		end;
+		if(top == z and not turtle.detectDown()) then
+			turtle.select(plugSlot);
+			while(turtle.getItemCount(plugSlot) < 2) do
+				sleep('Insert more fill blocks.', 10);
+			end;
+			while(not turtle.placeDown()) do
+				turtle.attackUp();
+				turtle.attackDown();
+			end;
+			turtle.select(lavoid + 1);
+		end;
+	end;
+	
+	if(plug) then
+		fillInHole();
+	end;
+	while(z < 0) do
+		refuel(1);
+		move(0, 0, 1);
+		if(plug) then
+			fillInHole();
+		end;
+	end;
+	turtle.select(lavoid + 1);
+end;
+
+--Digs the block in front until it's clear. It will not dig blocks to avoid.
+function dig()
+	test = true;
+	if(favoid > 0) then
+		for i = favoid, lavoid do
+			turtle.select(i);
+			if(turtle.compare()) then
+				test = false;
+				break;
+			end;
+		end;
+	end;
+	turtle.select(lavoid + 1);
+	if(test) then
+		ProtLib.dig();
+		dispose();
+	end;
+end;
+
+--Digging down until bedrock, clearing the walls for ores, and then moves back up.
+function digDown()
+	top = 1;
+	local function digAround()
+		for i = 0, 2 do
+			dig();
+			save(1);
+			rotate(1);
+		end;
+		dig();
+	end;
+	
+	state = 1;
+	if(z ~= 0) then
+		digAround();
+	end;
+	
+	while(true) do
+		if(top > 0 and turtle.detectDown()) then
+			top = z;
+		end;
+		if(not digDownTest()) then
+			break;
+		end;
+		refuel(1);
+		move(0, 0, -1);
+		digAround();
+	end;
+	state = 0;
+	save();
+	moveUp();
+end;
+
+--Moves to the next point in the grid
+function moveNext()
+	refuel(1);
+	if(y < Y - 1) then
+		move(0, lr, 0)
+	elseif(x < X - 1) then
+		y = 0;
+		lr = -lr;
+		move(1, 0, 0)
+	end;
+	local p = (x*Y + y)/(X*Y);
+	p = math.floor(p*1000 + 0.5)/10;
+	clear();
+	print(p..'% complete.');
+end;
+
+function moveTest()
+	if(y < Y - 1 or x < X - 1) then
+		return true;
+	else
+		return false;
+	end;
+end;
+
+--------
+--MAIN--
+--------
+if(not reboot) then
+	init();
+else
+	--If disposing items while rebooting
+	if(turtle.getItemCount(1) == 0 and automatic) then
+		turtle.select(1);
+		ProtLib.digUp();
+		turtle.select(lavoid + 1);
+		dispose();
+		while(turtle.getItemCount(1) == 0) do
+			sleep('Something went terribly wrong, and i lost the chest. Place it in slot 1.', 10);
+		end;
+	end;
+	--Resuming the current action.
+	--State 1: diging down, state 0: moving up
+	if(state == 1) then
+		digDown();
+	else
+		moveUp();
+	end;
+end;
+
+local posx, posy;
+while(moveTest()) do
+	--Calculating current location in the grid
+	if(lr == -1) then
+		posx = x;
+		posy = y;
+	else
+		posx = x;
+		posy = (Y - 1) - y;
+	end;
+	--If hitting a hole, and if it's not getting out of the hole after a reboot,
+	--then it will dig the hole.
+	if(A0[posx%N][posy%N] == 1 and not reboot) then
+		digDown();
+	end;
+	reboot = false;
+	moveNext();
+end;
+
+if(lr == -1) then
+	posx = X - 1;
+	posy = Y - 1;
+else
+	posx = X - 1;
+	posy = 0;
+end;
+if(A0[posx%N][posy%N] == 1) then
+	digDown();
+end;
+ProtLib.rotateTo(0);
+--Dumping all items to the enderchest
+if(automatic) then
+	if(turtle.detectUp()) then
+		ProtLib.digUp();
+	end;
+	turtle.select(1);
+	turtle.placeUp();
+	for i = lavoid + 1, 16 do
+		if(turtle.getItemCount(i) > 0) then
+			turtle.select(i);
+			turtle.dropUp();
+		end;
+	end;
+	turtle.select(1);
+	ProtLib.digUp();
+	turtle.select(lavoid + 1);
+end;
+--Deletes the startup program
+shell.run('delete', 'startup');
+clear();
+print('Digging accomplished.');

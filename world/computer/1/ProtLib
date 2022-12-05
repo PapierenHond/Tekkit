@@ -1,0 +1,414 @@
+--Protactin/Eonsv's move and dig API.
+--Used for all my programs.
+--v1.4
+
+--Coordinates used in the functions of this API.
+--All coordinates are integer values.
+local x;
+local y;
+local z;
+local rot;
+
+--Get function for the coordinate x.
+function getX()
+   return x;
+end;
+
+--Set function for the coordinate x.
+function setX(newX)
+   x = newX;
+   x = x - x%1;
+end;
+
+--Get function for the coordinate y.
+function getY()
+   return y;
+end;
+
+--Set function for the coordinate y.
+function setY(newY)
+   y = newY;
+   y = y - y%1;
+end;
+
+--Get function for the coordinate z.
+function getZ()
+   return z;
+end;
+
+--Set function for the coordinate z.
+function setZ(newZ)
+   z = newZ;
+   z = z - z%1;
+end;
+
+--Get function for the coordinate rot.
+function getRot()
+   return rot;
+end;
+
+--Set function for the coordinate rot.
+function setRot(newRot)
+   rot = newRot;
+   rot = rot - rot%1;
+end;
+
+--Selects the first empty slot 3-16.
+function selectFirstEmpty()
+   for i = 3, 16 do
+      if(turtle.getItemCount(i) == 0) then
+         turtle.select(i);
+         return i;
+      end;
+   end;
+   return 0;
+end;
+
+--Fixes the rot variable to rot = 0, 1, 2, 3
+local function fixRot()
+   rot = rot - rot%1;
+   while(rot < 0) do
+      rot = rot + 4;
+   end;
+   while(rot > 3) do
+      rot = rot - 4;
+   end;
+   return rot;
+end;
+
+--Update the coordinates x, y.
+local function newPos()
+   fixRot();
+   if(rot == 0) then
+      x = x + 1;
+   elseif(rot == 1) then
+      y = y + 1;
+   elseif(rot == 2) then
+      x = x - 1;
+   else
+      y = y - 1;
+   end;
+end;
+
+--Initializes the possition. x = a; y = b; z = c and the rotation rot = r.
+function setPos(newX, newY, newZ, newRot)
+   if(newX == nil) then
+      x = 0;
+   else
+      x = newX;
+   end;
+   if(newY == nil) then
+      y = 0;
+   else
+      y = newY;
+   end;
+   if(newZ == nil) then
+      z = 0;
+   else
+      z = newZ;
+   end;
+   if(newRot == nil) then
+      rot = 0;
+   else
+      rot = newRot;
+   end;
+end;
+
+--Rotates in positive direction(dir > 0) or negative direction (dir < 0)
+--Returns the current rotation rot
+function rotate(dir)
+   fixRot();
+   if(dir >= 1) then
+      rot = rot + 1;
+      turtle.turnLeft();
+      dir = dir - 1;
+   elseif(dir <= -1) then
+      rot = rot - 1;
+      turtle.turnRight();
+      dir = dir + 1;
+   end;
+   fixRot();
+   if(dir < 0 or dir > 0) then
+      rotate(dir);
+   end;
+   return rot;
+end;
+
+--Tries to move forward, if unable to then attacks and digs untill it is clear,
+--or untill it has tried N times since last successfull attack or dig.
+--s seconds between each try.
+--Returns true if it is able to move forward, false if not.
+function forward(N, s)
+   if(N == nil) then
+      N = 5;
+   end;
+   if(s == nil) then
+      s = 0.5;
+   end;
+   local n = 0;
+   while(not turtle.forward()) do
+      n = n + 1;
+      if(turtle.attack()) then
+         n = 0;
+      elseif(turtle.dig()) then
+         n = 0;
+      end;
+      if(n == N) then
+         return false;
+      end;
+      os.sleep(s);
+   end;
+   newPos();
+   return true;
+end;
+
+--Tries to move up, if unable to then attacks and digs untill it is clear,
+--or untill it has tried N times since last successfull attack or dig.
+--s seconds between each try.
+--Returns true if it is able to move up, false if not.
+function up(N, s)
+   if(N == nil) then
+      N = 5;
+   end;
+   if(s == nil) then
+      s = 0.5;
+   end;
+   local n = 0;
+   while(not turtle.up()) do
+      n = n + 1;
+      if(turtle.attackUp()) then
+         n = 0;
+      elseif(turtle.digUp()) then
+         n = 0;
+      end;
+      os.sleep(s);
+      if(n == N) then
+         return false;
+      end;
+   end;
+   z = z + 1;
+   return true;
+end;
+
+--Tries to move down, if unable to then attacks and digs untill it is clear,
+--or untill it has tried N times since last successfull attack or dig.
+--s seconds between each try.
+--Returns true if it is able to move down, false if not.
+function down(N, s)
+   if(N == nil) then
+      N = 5;
+   end;
+   if(s == nil) then
+      s = 0.5;
+   end;
+   local n = 0;
+   while(not turtle.down()) do
+      n = n + 1;
+      if(turtle.attackDown()) then
+         n = 0;
+      elseif(turtle.digDown()) then
+         n = 0;
+      end;
+      if(n == N) then
+         return false;
+      end;
+      os.sleep(s);
+   end;
+   z = z - 1;
+   return true;
+end;
+
+--Tries to move backwards, if unable to then attacks and digs untill it is clear,
+--or untill it has tried N times since last successfull attack or dig.
+--s seconds between each try.
+--Returns true if it is able to move backwards, false if not.
+function back(N, s)
+   local try;
+   if(not turtle.back()) then
+      rotate(2);
+      try = forward(N, s);
+      rotate(2);
+      return try;
+   else
+      rot = rot + 2;
+      newPos();
+      rot = rot + 2;
+      fixRot();
+      return true;
+   end;
+end;
+
+--Digs untill clear, or untill the turtle have tried N times.
+--s seconds between each try.
+--Returns true if successfull, false if not
+function dig(N, s)
+   if(N == nil) then
+      N = 5;
+   end;
+   if(s == nil) then
+      s = 0.5;
+   end;
+   local n = 0;
+   while(turtle.detect()) do
+      if(turtle.dig()) then
+         n = 0;
+      else
+         n = n + 1;
+      end;
+      if(n == N) then
+         return false;
+      end;
+      os.sleep(s);
+   end;
+   return true;
+end;
+
+--Digs up untill clear, or untill the turtle have tried N times.
+--s seconds between each try.
+--Returns true if successfull, false if not
+function digUp(N, s)
+   if(N == nil) then
+      N = 5;
+   end;
+   if(s == nil) then
+      s = 0.5;
+   end;
+   local n = 0;
+   while(turtle.detectUp()) do
+      if(turtle.digUp()) then
+         n = 0;
+      else
+         n = n + 1;
+      end;
+      if(n == N) then
+         return false;
+      end;
+      os.sleep(s);
+   end;
+   return true;
+end;
+
+--Digs down untill clear, or untill the turtle have tried N times.
+--s seconds between each try.
+--Returns true if successfull, false if not
+function digDown(N, s)
+   if(N == nil) then
+      N = 5;
+   end;
+   if(s == nil) then
+      s = 0.5;
+   end;
+   local n = 0;
+   while(turtle.detectDown()) do
+      if(turtle.digDown()) then
+         n = 0;
+      else
+         n = n + 1;
+      end;
+      if(n == N) then
+         return false;
+      end;
+      os.sleep(s);
+   end;
+   return true;
+end;
+
+--Rotates to r, rotating the least number of times needed.
+--Returns number of times rotated |dr| and the direction rotated dr/|dr|.
+function rotateTo(r)
+   fixRot();
+   local dr = r - rot;
+   if(dr == 0) then
+      return 0;
+   elseif(dr < -2) then
+      rotate(1);
+      return 1;
+   elseif(dr > 2) then
+      rotate(-1);
+      return -1;
+   else
+      rotate(dr);
+      return dr;
+   end;
+end;
+
+--Moves to the coordinates xe, ye, ze. Attacks and digs if something is in it's path.
+--Returns true if successfull. False if stuck.
+function moveTo(xe, ye, ze)
+   local try = true;
+   if(x < xe) then
+      rotateTo(0);
+      while(x < xe) do
+         try = forward();
+         if(not try) then
+            return false;
+         end;
+      end;
+   elseif(x > xe) then
+      rotateTo(2);
+      while(x > xe) do
+         try = forward();
+         if(not try) then
+            return false;
+         end;
+      end;
+   end;
+   if(y < ye) then
+      rotateTo(1);
+      while(y < ye) do
+         try = forward();
+         if(not try) then
+            return false;
+         end;
+      end;
+   elseif(y > ye) then
+      rotateTo(3);
+      while(y > ye) do
+         try = forward();
+         if(not try) then
+            return false;
+         end;
+      end;
+   end;
+   if(z < ze) then
+      while(z < ze) do
+         try = up();
+         if(not try) then
+            return false;
+         end;
+      end;
+   elseif(z > ze) then
+      while(z > ze) do
+         try = down();
+         if(not try) then
+            return false;
+         end;
+      end;
+   end;
+   return true;
+end;
+
+--Moves dx, dy, dz blocks in the x, y, z direction.
+--Returns true if sucsessfull, false if not.
+function moveRel(dx, dy, dz)
+   return moveTo(getX() + dx, getY() + dy, getZ() + dz);
+end;
+
+--Commonly used printing functions
+
+--Clears the screen, and sets the cursor at the top left of the screen.
+function clear()
+	term.clear();
+	term.setCursorPos(1, 1);
+end;
+
+--Sleeps time seconds, while displaying the message text and counting down.
+function sleep(text, time)
+	for i = 0, time - 1 do
+		clear();
+		print(text);
+		print('Countdown: '..time - i..'s.');
+		os.sleep(1);
+	end;
+	clear();
+end;

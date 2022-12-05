@@ -1,0 +1,1558 @@
+--Wojbie's Swarm Miner Main Program
+--Controls Turtle and Handles all mining related parts of programing
+--This is part of set of programs
+--To get rest of them make instaler Floppy Disk by placing empty Floppy Disk in disk drive and using pastebin get LXLBZK25 disk/startup
+
+local tArgs = {...}
+
+--Standalone mode (Warning Unstable Can get funky on crashes and reboots) 
+
+local usegps=true
+
+--Minimal level trutle can reach (default 5 - at 4 starts bedrock) - in case of flat bedrock set to 2 - added on HeffeD Request 
+
+local levelmin=5
+
+--connecting to modem
+local channel=15151
+local modem=false
+if peripheral.isPresent("right") then
+	if peripheral.getType("right")=="modem" then
+		modem=peripheral.wrap("right")
+			if modem["isWireless"] then
+				if modem.isWireless() then
+					modem.open(channel)
+				else
+					modem=false
+				end
+			else
+				modem.open(channel)
+			end
+	end
+end
+
+
+--Creating tables for later use
+
+local pos={}
+local settings={}
+local order={}
+local current={}
+local currents={} -- other brothers currents.
+
+--Flags - Dont touch
+
+local working=false  --if done any work in this loop.
+local movelock=false  --if moving (locks system stopping)
+local reboot=false --Ctrl+r/s detection
+local rebootimer --2 sec timer canceling ctrl+r/s
+local maplock=false  --map useage lock
+local run=true  --mining or waiting
+local terminate=false  --endig program
+local drawmap=true  --redrawing map
+local maintencegoto=false --if going to manual maintence point
+local status="Running"  --status info
+local monactive=false --if monitor is active
+
+--debug Flag - You can change this one
+
+local ldebug=false
+
+--constans
+
+local function Rev(A)  --reverses table function - keys for values and vice versa
+	local Revt={}
+	for i,j in pairs(A) do
+		Revt[j]=i
+	end
+	return Revt
+end
+
+local function stamp(A)
+local logo
+if turtle then
+logo="__          __     _  _      _       \n\\ \\        / /    (_)| |    (_)      \n \\ \\  /\\  / /___   _ | |__   _   ___ \n  \\ \\/  \\/ // _ \\ | || '_ \\ | | / _ \\\n   \\  /\\  /| (_) || || |_) || ||  __/\n    \\/  \\/  \\___/ | ||_.__/ |_| \\___|\n                 _/ |                \n                |__/                 "
+else
+logo=" __      __                __                      \n/\\ \\  __/\\ \\           __ /\\ \\       __            \n\\ \\ \\/\\ \\ \\ \\    ___  /\\_\\\\ \\ \\____ /\\_\\      __   \n \\ \\ \\ \\ \\ \\ \\  / __'\\\\/\\ \\\\ \\ '__'\\\\/\\ \\   /'__'\\ \n  \\ \\ \\_/ \\_\\ \\/\\ \\L\\ \\\\ \\ \\\\ \\ \\L\\ \\\\ \\ \\ /\\  __/ \n   \\ '\\___x___/\\ \\____/_\\ \\ \\\\ \\_,__/ \\ \\_\\\\ \\____\\\n    '\\/__//__/  \\/___//\\ \\_\\ \\\\/___/   \\/_/ \\/____/\n                      \\ \\____/                     \n                       \\/___/                      "
+end
+	term.setCursorPos(1,A)
+	print(logo)
+end
+
+--predefining functions that need it (one for now)
+
+local maintence  --maintence function predefinition
+local fullcheack --fullcheack function predefinition
+
+-- open peripherals chest definitions - left space for additional definitions
+-- one of chest definitions is for older version - other is for new one.
+
+local chests={
+container_chest=true, 
+chest=true,
+--drive=true, --for testing
+}
+
+local mapmark={".","+","#"}
+local krampam=Rev(mapmark)
+
+----Utility Ones
+
+-- File Useage
+
+local function save(A,B) local file = fs.open(tostring(A),"w") file.write(B) file.close() end
+local function saveT(A,B) save(A,textutils.serialize(B)) end
+local function saveTH(A,B) save(A,string.gsub(textutils.serialize(B),"},","},\r\n")) end
+local function get(A) local file = fs.open(tostring(A),"r") if not file then return false end local data = file.readAll() file.close() if data then return data end end
+local function getT(A) local data = get(A) if data then data = textutils.unserialize(data) end if data then return data end end
+
+--Distance Calculation
+
+local function fromto(A,B) return math.abs(A.x-B.x)+math.abs(A.y-B.y)+math.abs(A.z-B.z) end
+
+--Modem use (transiting if can transmit)
+
+local function transmit(...)
+	if modem then modem.transmit(...) end
+end
+
+--Comparing 2 orders
+
+local function compOr(A,B)
+	if
+	A.size.x==B.size.x and
+	A.size.y==B.size.y and
+	A.size.z==B.size.z and
+	A.start.x==B.start.x and
+	A.start.y==B.start.y and
+	A.start.z==B.start.z and
+	A.start.xd==B.start.xd and
+	A.start.zd==B.start.zd and
+	A.repeats.x==B.repeats.x and
+	A.repeats.z==B.repeats.z
+	then
+		return true
+	else
+		return false
+	end
+end
+
+--Merging maps (they are same size from definition)
+
+local function merMap(A,B) 
+	local Out={}
+	local kA,vA,kAi,vAi
+	for kA,vA in pairs(A) do
+		Out[kA]={}
+		for kAi,vAi in pairs(vA) do
+			if krampam[A[kA][kAi]] <= krampam[B[kA][kAi]] then
+				Out[kA][kAi]=A[kA][kAi]
+			else
+				Out[kA][kAi]=B[kA][kAi]
+			end
+		end
+	end
+	return Out
+end
+
+-- Yes/No Questions
+
+local function yn(A)
+	if not A then return false end
+	local key
+	write(A.."[y/n]:")
+	while true do
+		_,key = os.pullEvent("key")
+		if key==21 then write(keys.getName(key).."\n") sleep(0.01) return true
+		elseif key==49 then write(keys.getName(key).."\n") sleep(0.01) return false
+		end
+	end
+end
+
+-- Compressing inventory -- used only if cobble dropping is online - otherwise there is never a hole in inventory
+
+local function compress(A)
+	if not A then return false end
+	local i,k
+	for i=A,16 do
+		if turtle.getItemCount(i)==0 then
+			for k=i,16 do
+				if turtle.getItemCount(k)>0 then turtle.select(k) turtle.transferTo(i) break end
+			end
+		end
+		if turtle.getItemCount(i)>0 then
+			turtle.select(i) 
+			for k=i,16 do
+				if turtle.compareTo(k) then turtle.select(k) turtle.transferTo(i,turtle.getItemSpace(i)) turtle.select(i) end
+			end
+		end
+	end
+end
+
+--Char testing -- used for ctrl+r/s detection
+
+local function testforchar(A)
+	local out=false
+	local test=keys.getName(A)
+	local tempT={}
+	os.queueEvent("testchar"..test) -- possible loose of event? Tested - 100% operational
+	
+	while true do
+		table.insert(tempT,{os.pullEvent()})
+		--print(unpack(tempT[#tempT]))
+		if tempT[#tempT][1]=="char" then
+			if tempT[#tempT][2]==test then out=true end
+		elseif tempT[#tempT][1]=="testchar"..test then
+			table.remove(tempT,#tempT) break
+		end
+	end
+
+	while #tempT >0 do
+		os.queueEvent(unpack(table.remove(tempT)))
+	end
+
+	return out
+end
+
+-- normalizing zones (cause pepole are idiots sometimes)
+
+local function normZone()
+	local mi=math.min
+	local ma=math.max
+	for k,i in pairs(order.zone) do
+		local j={xl=i.xl,yl=i.yl,zl=i.zl,xu=i.xu,yu=i.yu,zu=i.zu}
+		order.zone[k]={xl=mi(j.xl,j.xu),yl=mi(j.yl,j.yu),zl=mi(j.zl,j.zu),xu=ma(j.xl,j.xu),yu=ma(j.yl,j.yu),zu=ma(j.zl,j.zu)}
+	end
+end
+
+-- face to xd,zd and back
+
+local function facetx(A)
+	if A==0 then return 0,1
+	elseif A==1 then return -1,0
+	elseif A==2 then return 0,-1
+	elseif A==3 then return 1,0 end
+	return nil,nil
+end
+
+local function xtface(A,B)
+	if A==0 and B==1 then return 0
+	elseif A==-1 and B==0 then return 1
+	elseif A==0 and B==-1 then return 2
+	elseif A==1 and B==0 then return 3 end
+	return -1
+end
+
+-- getting User entered coords
+
+local function getpos()
+	local temp={}
+	while true do
+		print("Enter data from F3 Screen")
+		write("Enter x coordinate:") temp.x=tonumber(read())
+		write("Enter y coordinate:") temp.y=tonumber(read())
+		write("Enter z coordinate:") temp.z=tonumber(read())
+		write("Enter f coordinate\n (where turtle is facing):") temp.xd,temp.zd=facetx(tonumber(read()))
+		if temp.x and temp.y and temp.z and temp.xd and temp.zd then
+			print("x:"..temp.x.." y:"..temp.y.." z:"..temp.z.." f:"..xtface(temp.xd,temp.zd))
+			if yn("Are thise correct?") then break end
+		end
+	end
+	return temp
+end
+
+-- fuel checking
+
+local function getFuelLevel()
+	local i = turtle.getFuelLevel()
+	sleep(0.01) --Wierd Yeld bug ugly fix -- unneded now but still left gere 0 just in case.
+	if i =="unlimited" then
+		return 10000000  --This should be enuf for radter large mine - still its mostly unused.
+	else
+		return i
+	end
+end
+
+
+-- Making Map
+
+local function newMap(A,B)
+	local i,k
+	local Out={}
+	for i=1,A do
+		Out[i]={}
+		for k=1,B do
+			Out[i][k]=mapmark[3]  --Filling map with #
+		end
+	end
+	return Out
+end
+
+---- Movement
+
+-- Zone testing
+local function inZone(A)
+	local i
+	for _,i in pairs(order.zone) do
+		--print(i.xl.." "..i.yl.." "..i.zl) print(A.x.." "..A.y.." "..A.z) print(i.xu.." "..i.yu.." "..i.zu)
+		if
+		i.xl<=A.x and i.xu>=A.x and
+		i.yl<=A.y and i.yu>=A.y and
+		i.zl<=A.z and i.zu>=A.z
+		then return true end
+	end
+	return false
+end
+
+-- TArget testing
+local function BroLock(A)
+	local i
+	local unlock
+	local stat=status
+	local timeout=os.clock()
+	while true do
+		unlock=true
+		for _,i in pairs(currents) do
+			if i.pos then
+				if i.pos.x==A.x and i.pos.y==A.y and i.pos.z==A.z and i.dist < 15 and (os.clock()-i.atime)<10 then unlock=false status="Queue" break end
+			end
+		end
+		if unlock or (os.clock()-timeout)>60 then status=stat return true  end
+		sleep(2)
+	end
+end
+
+
+-- Chest empting (OpenPeripheral Only) (also used for vacumming)
+
+local function getAll(A)
+	while turtle["suck"..A]() do
+		if turtle.getItemCount(16) >= 1 and not maintencegoto then fullcheack() end
+	end
+end
+
+-- Cleaner Function --works only on non-block situations.
+
+local function vacuum(A)
+	if not turtle["detect"..A]() then
+		getAll(A)
+	end
+end
+
+-- Brutality function
+
+local function attack(A)
+	while turtle["attack"..A]() do sleep(0.4) turtle["attack"..A]() sleep(0.4) end
+end
+
+--Combo Function
+
+local function getAttackAll(A)
+getAll(A)
+attack(A)
+getAll(A)
+end
+
+-- Mining
+
+local function digUp()
+	if inZone({x=pos.x,y=pos.y+1,z=pos.z}) then return false end
+	if peripheral.isPresent("top") then
+		local A=peripheral.getType("top") 
+		if not chests[A] then
+			sleep(1) return false
+		end
+	end
+	getAttackAll("Up")
+	return turtle.digUp()
+end
+
+local function dig()
+	if inZone({x=pos.x+pos.xd,y=pos.y,z=pos.z+pos.zd}) then return false end
+	if peripheral.isPresent("front") then
+		local A=peripheral.getType("front") 
+		if not chests[A] then
+			sleep(1) return false
+		end
+	end
+	getAttackAll("")
+	return turtle.dig()
+end
+
+local function digDown()
+	if inZone({x=pos.x,y=pos.y-1,z=pos.z}) then return false end
+	if peripheral.isPresent("bottom") then
+		local A=peripheral.getType("bottom") 
+		if not chests[A] then
+			sleep(1) return false
+		end
+	end
+	getAttackAll("Down")
+	return turtle.digDown()
+end
+
+--Turning
+
+local function turnRight()
+	while reboot do sleep(0.01) end
+	movelock=true
+	turtle.turnRight()
+	pos.xd, pos.zd = -pos.zd, pos.xd
+	if not usegps then saveT("/gps.log",pos) end
+	movelock=false
+end
+
+local function turnLeft()
+	while reboot do sleep(0.01) end
+	movelock=true
+	turtle.turnLeft()
+	pos.xd, pos.zd = pos.zd, -pos.xd
+	if not usegps then saveT("/gps.log",pos) end
+	movelock=false
+end
+
+--setting direction
+--old face -> local function face(A,B) while pos.xd ~= A or pos.zd ~= B do turnRight() end end
+
+local function face(A,B)
+	if pos.xd==A and pos.zd==B then return end
+	if pos.zd==A and -pos.xd==B then turnLeft() return end
+	if -pos.zd==A and pos.xd==B then turnRight() return end
+	if -pos.xd==A or -pos.zd==B then turnRight() turnRight() return end
+end
+
+-- main movement ones
+
+local function up(B)
+	if not B then B=0 end
+	while true do
+		if not turtle.detectUp() then getAttackAll("Up") end
+		while reboot do sleep(0.01) end
+		movelock=true
+		if turtle.up() then
+			pos.y = pos.y+1
+			if not usegps then saveT("/gps.log",pos) end
+			movelock=false
+			return true
+		elseif B>0 then
+			digUp() B=B-1
+		else
+			movelock=false
+			return false
+		end
+	end
+end
+
+local function down(B)
+	if not B then B=0 end
+	while true do
+		if not turtle.detectDown() then getAttackAll("Down") end
+		while reboot do sleep(0.01) end
+		movelock=true
+		if turtle.down() then
+			pos.y = pos.y-1
+			if not usegps then saveT("/gps.log",pos) end
+			movelock=false
+			return true
+		elseif B>0 then
+			digDown() B=B-1
+		else
+			movelock=false
+			return false
+		end
+	end
+end
+
+local function forward(B)
+if not B then B=0 end
+	while true do
+		if not turtle.detect() then getAttackAll("") end
+		while reboot do sleep(0.01) end
+		movelock=true
+		if turtle.forward() then
+			pos.x = pos.x+pos.xd
+			pos.z = pos.z+pos.zd
+			if not usegps then saveT("/gps.log",pos) end
+			movelock=false
+			return true
+		elseif B>0 then
+			dig() B=B-1
+		else
+			movelock=false
+			return false
+		end
+	end
+end
+
+local function back(B)  --unused in program but left for completition reasons (could be used in future)
+	if not B then B=0 end
+	while true do
+		while reboot do sleep(0.01) end
+		movelock=true
+		if turtle.back() then
+			pos.x = pos.x-pos.xd
+			pos.z = pos.z-pos.zd
+			if not usegps then saveT("/gps.log",pos) end
+			movelock=false
+			return true
+		else
+			movelock=false
+			return false
+		end
+	end
+end
+
+-- movement random pathfinding addon
+
+local function upP(B,C)
+	if not B then B=0 end
+	if not C then C=0 end
+	while true do
+		if up(B) then
+			return true
+		else
+			if turtle.detect() then
+				if math.random(1,2) == 1 then
+					turnRight(B)
+				else
+					turnLeft(B)
+				end
+			end
+			forward(B)
+			if up(B) then return true end
+			if C>0 then
+				C=C-1
+			else
+				return false
+			end
+		end
+	end
+end
+
+
+local function downP(B,C)
+	if not B then B=0 end
+	if not C then C=0 end
+	while true do
+		if down(B) then
+			return true
+		else
+			if turtle.detect() then
+				if math.random(1,2) == 1 then
+					turnRight(B)
+				else
+					turnLeft(B)
+				end
+			end
+				forward(B)
+				if down(B) then return true end
+			if C>0 then
+				C=C-1
+			else
+				return false
+			end
+		end
+	end
+end
+
+local function forwardP(B,C)
+	if not B then B=0 end
+	if not C then C=0 end
+	while true do
+		if forward(B) then
+			return true
+		else
+			if math.random(1,2) == 1 then
+				if not upP(B,math.min(C,3)) then downP(B,math.min(C,3)) end
+			else
+				if not downP(B,math.min(C,3)) then upP(B,math.min(C,3)) end
+			end
+			if forward(B) then return true end
+			if C>0 then
+				C=C-1
+			else
+				return false
+			end
+		end
+	end
+end
+
+local function backP(B,C) --unused in program but left for completition reasons (could be used in future)
+	if not B then B=0 end
+	if not C then C=0 end
+	while true do
+		if back(B) then
+			return true
+		else
+			if math.random(1,2) == 1 then
+				if not upP(B,math.min(C,3)) then downP(B,math.min(C,3)) end
+			else
+				if not downP(B,math.min(C,3)) then upP(B,math.min(C,3)) end
+			end
+			if back(B) then return true end
+			if C>0 then
+				C=C-1
+			else
+				return false
+			end
+		end
+	end
+end
+
+---- Advanced movement (goto)
+
+local function goto(A,B,C)
+	if not B then B=0 end
+	if not C then C=0 end
+	--if (pos.x ~= A.x or pos.z ~= A.z) and pos.xd == pos.zd then getposdr(B) end -- get data at start not now.
+
+	while A.x-pos.x ~= 0 or A.y-pos.y ~= 0 or A.z-pos.z ~= 0 do
+		if A.x-pos.x < 0 then face(-1,0) while A.x-pos.x ~= 0 and pos.xd==-1 and pos.zd==0 do if not forwardP(B,C) then break end BroLock(A) end BroLock(A) end
+		if A.x-pos.x > 0 then face(1,0) while A.x-pos.x ~= 0 and pos.xd==1 and pos.zd==0 do if not forwardP(B,C) then break end BroLock(A) end BroLock(A) end
+		if A.z-pos.z < 0 then face(0,-1) while A.z-pos.z ~= 0 and pos.xd==0 and pos.zd==-1 do if not forwardP(B,C) then break end BroLock(A) end BroLock(A) end
+		if A.z-pos.z > 0 then face(0,1) while A.z-pos.z ~= 0 and pos.xd==0 and pos.zd==1 do if not forwardP(B,C) then break end BroLock(A) end BroLock(A) end
+		if A.y-pos.y < 0 then while A.y-pos.y ~= 0 do if not downP(B,C) then break end BroLock(A) end BroLock(A) end
+		if A.y-pos.y > 0 then while A.y-pos.y ~= 0 do if not upP(B,C) then break end BroLock(A) end BroLock(A) end 
+		if settings.manual then
+			local i=getFuelLevel()
+			if i<fromto(A,pos) and i>fromto(order.manpos,pos)+100 then maintence(true) end
+		else
+			if getFuelLevel()<fromto(A,pos) then maintence(true) end
+		end
+		sleep(0.01)
+	end
+	if A.xd==0 or A.zd==0 then
+		face(A.xd,A.zd)
+	end
+
+	return true
+end
+
+---- Inventory menagement
+
+local function findplace()
+	local i
+	if not turtle.detectDown() then return "Down" end
+	if not turtle.detectUp() then return "Up" end
+	for i=1,4 do
+		if not turtle.detect() then return "" end
+		turnLeft()
+	end
+end
+
+--enderchest recovery (if it gets lost after crash/unload)
+
+local function slotask()
+	
+	if settings.slot.stuff then
+		if turtle.getItemCount(settings.slot.stuff)==0 then
+			write("Enderchest - Loot in slot "..tostring(settings.slot.stuff))read()
+		end
+	end
+	if 	settings.slot.fuel then
+		if turtle.getItemCount(settings.slot.fuel)==0 then
+			write("Enderchest - Fuel in slot "..tostring(settings.slot.fuel))read()
+		end
+	end
+	if 	settings.slot.cobble then
+		if turtle.getItemCount(settings.slot.cobble)==0 then
+			write("1 cobble in slot "..tostring(settings.slot.cobble))read()
+		end
+	end
+end
+
+local function slotcheck()
+	local function test(A)
+		local temp=peripheral.getType(A)
+		if not temp then return true end
+		if temp=="enderchest" then return true end
+		return false
+	end
+
+	if not settings.manual then
+		local temp
+		if turtle.getItemCount(1)==0 then
+			turtle.select(1)
+			if turtle.detectDown() and test("bottom") and turtle.getItemCount(1)==0 then turtle.digDown() end
+			if turtle.detectUp() and test("top") and turtle.getItemCount(1)==0 then turtle.digUp() end
+			if turtle.detect() and test("front") and turtle.getItemCount(1)==0 then turtle.dig() end
+		end
+		if turtle.getItemCount(2)==0 then
+			turtle.select(2)
+			if turtle.detectDown() and test("bottom") and turtle.getItemCount(2)==0 then turtle.digDown() end
+			if turtle.detectUp() and test("top") and turtle.getItemCount(2)==0 then turtle.digUp() end
+			if turtle.detect() and test("front") and turtle.getItemCount(2)==0 then turtle.dig() end
+		end
+	end
+end
+
+-- maintence
+local function refside(side,amount,ender,deb)
+	local state=getFuelLevel()
+	local value
+	turtle.select(settings.slot.todrop)
+	while true do
+		if ender then 
+			turtle.select(settings.slot.fuel)
+			while not turtle["place"..side]() do attack(side) vacuum(side) sleep(0.01) end
+			turtle.select(settings.slot.todrop)
+		end
+		if	turtle["suck"..side]() then
+			if turtle.refuel(1) then
+				value=getFuelLevel()-state
+				state=getFuelLevel()
+				if deb then print("Worth:"..value.." Need:"..math.max(math.ceil((amount-state)/value),0)) end
+				if value ~= 0 then turtle.refuel(math.max(math.ceil((amount-state)/value),0)) end
+				turtle["drop"..side](turtle.getItemCount(settings.slot.todrop))
+				turtle.refuel(64)
+				state=getFuelLevel()
+			end
+			turtle["drop"..side](turtle.getItemCount(settings.slot.todrop))
+		end
+		if ender then 
+			turtle.select(settings.slot.fuel)
+			turtle["dig"..side]()
+			turtle.select(settings.slot.todrop)
+		end
+		if deb then print(state) end
+		sleep(1)
+		if state>=amount then break end
+	end
+end
+
+function maintence(noback) --not local cause already defined
+	local i
+	saveT("/spot.log",pos)
+	if settings.manual then
+		if maintencegoto then return false end
+		local distance=fromto(pos,order.manpos)
+		maintencegoto=true
+		goto(order.manpos,0,10)
+		maintencegoto=false
+		
+		--drop stuff
+		for i=(settings.slot.todrop),16 do turtle.select(i) while not (turtle.drop() and turtle.getItemCount(i)==0) and turtle.getItemCount(i)>0 do sleep(0.01) end end
+
+		if getFuelLevel() < 400+distance*2 then
+			refside("Up",500+distance*2,false,false)
+		end
+
+	else
+		local distance=fromto(pos,order.start)
+		--find space for it
+		local side=findplace()
+		
+		--drop stuff
+		turtle.select(settings.slot.stuff)
+		while not turtle["place"..side]() do attack(side) vacuum(side) sleep(0.01) end
+		for i=(settings.slot.todrop),16 do turtle.select(i) while (not turtle["drop"..side]() and turtle.getItemCount(i)==0) and turtle.getItemCount(i)>0 do sleep(0.01) end end
+		turtle.select(settings.slot.stuff)
+		turtle["dig"..side]()
+		
+		if getFuelLevel() < 100+distance then 
+			refside(side,200+distance,true,false)
+		end
+		
+	end
+	if not noback then goto(getT("/spot.log"),0,10) end
+	turtle.select(settings.slot.mine)
+end
+
+--fast check
+
+function fullcheack() 
+
+	local function needfuel()
+		if settings.manual then
+			return fromto(pos,order.manpos)+200
+		else
+			return fromto(pos,order.start)+100
+		end
+	end
+	local i
+	
+	if settings.cobbleaway then
+
+		if turtle.getItemCount(settings.slot.cobble) > 60 then 
+			turtle.select(settings.slot.cobble)
+			turtle.dropUp(turtle.getItemCount(settings.slot.cobble)-30)
+		end
+		
+		if turtle.getItemCount(16) >= 1 or getFuelLevel() < needfuel() then
+			for i=settings.slot.todrop,16 do
+				if turtle.compareTo(i) then
+					turtle.select(i)
+					turtle.dropUp(turtle.getItemCount(i))
+					turtle.select(settings.slot.cobble)				
+				end
+			end
+		compress(settings.slot.todrop)
+		end
+		
+		turtle.select(settings.slot.mine)
+	end
+
+	if  turtle.getItemCount(16) >= 1 or getFuelLevel() < needfuel() then maintence() return true end
+	return false
+end
+
+---- mining function
+
+local function mine3()
+	local tu,tf,td
+	turtle.select(settings.slot.mine)
+	fullcheack()
+	while true do
+		if turtle.detectDown() then td=digDown() fullcheack()  else getAttackAll("Down") td=false end
+		if turtle.detect() then tf=dig() fullcheack()  else getAttackAll("") tf=false end
+		if turtle.detectUp() then tu=digUp() fullcheack()  else getAttackAll("Up") tu=false end
+		if not (tu or tf or td) then break end
+	end
+	fullcheack()
+	return true
+end
+
+-- minepart function
+
+-- plotting path - Creating table of positions to mine in this layer
+
+local function plot(A,right) --A{x,z} current repeat -- plots list of coords that have to be reached to mine one layer.
+	--pos={x=0,y=0,z=0,xd=1,zd=0}
+	local i,j,k
+	local Out={}
+	local function mark() table.insert(Out,{x=pp.x,y=pp.y,z=pp.z,xd=pp.xd,zd=pp.zd}) end
+	local function omark() Out[#Out]={x=pp.x,y=pp.y,z=pp.z,xd=pp.xd,zd=pp.zd} end
+	local function f() pp.x = pp.x+pp.xd pp.z = pp.z+pp.zd mark() end
+	local function b() pp.x = pp.x-pp.xd pp.z = pp.z-pp.zd mark() end
+	local function u() pp.y = pp.y+1 mark() end
+	local function d() pp.y = pp.y-1 mark() end
+	local function r() pp.xd, pp.zd = -pp.zd, pp.xd omark() end
+	local function l() pp.xd, pp.zd = pp.zd, -pp.xd omark() end
+
+	-- figure out coords for other mining directions
+
+	if right then
+		if current.layer%2==0 or order.size.z%2==0 then
+			pp= {x=order.start.x+(A.x-1)*order.size.x*order.start.xd+(A.z-1)*order.size.z*(-order.start.zd),
+				y=math.max(order.start.y-1-current.layer*3,levelmin,order.start.y-order.size.y+2),
+				z=order.start.z+(A.x-1)*order.size.x*order.start.zd+(A.z-1)*order.size.z*order.start.xd,
+				xd=order.start.xd,zd=order.start.zd}
+		else
+			pp= {x=order.start.x+(A.x-1)*order.size.x*order.start.xd+(A.z-1)*order.size.z*(-order.start.zd)+(order.size.z-1)*(-order.start.zd)+(order.size.x-1)*order.start.xd,
+				y=math.max(order.start.y-1-current.layer*3,levelmin,order.start.y-order.size.y+2),
+				z=order.start.z+(A.x-1)*order.size.x*order.start.zd+(A.z-1)*order.size.z*order.start.xd+(order.size.z-1)*order.start.xd+(order.size.x-1)*order.start.zd,
+				xd=-order.start.xd,zd=-order.start.zd}
+		end
+	else
+		pp= {x=order.start.x+(A.x-1)*order.size.x*order.start.xd+(A.z-1)*order.size.z*(-order.start.zd)+(order.size.z-1)*(-order.start.zd),
+			y=math.max(order.start.y-1-current.layer*3,levelmin,order.start.y-order.size.y+2),
+			z=order.start.z+(A.x-1)*order.size.x*order.start.zd+(A.z-1)*order.size.z*order.start.xd+(order.size.z-1)*order.start.xd,
+			xd=order.start.xd,zd=order.start.zd}
+	end
+	
+	--creating path
+	mark()
+	
+	for i=1,order.size.z do
+		for j=1,order.size.x-1 do
+			f()
+		end
+		if i<order.size.z then
+		if right then r() f() r() right=false else l() f() l() right=true end
+		else r() r() end
+	end
+
+	--removing parts inside zones -- so that turtle won't get stuck on wall trying to get in impossible place.
+
+	for i = table.getn(Out), 1, -1 do
+		if inZone(Out[i]) then table.remove (Out,i) end
+	end
+
+	--returtning path
+	return Out,right
+end
+
+--executing plan
+
+local function follow(A)
+status="Mining"
+local function nex() table.remove(A,1) if table.getn(A)>=1 and inZone(A[1]) then nex() end  end
+while table.getn(A)>=1 do
+if goto(A[1],10,10) then mine3() nex() end
+end
+end
+
+--planning and executing controlrt
+
+local function minepart(A) --A{x,z} current repeat 
+working=true
+
+while maplock do sleep(0.01) end
+maplock=true
+order.map[A.x][A.z]=mapmark[2]
+drawmap=true
+saveTH("/order.log",order)
+maplock=false
+
+if not current.layer then current.layer = 0 end
+saveT("/current.log",current)
+--pos={x=0,y=0,z=0,xd=1,zd=0}
+local right=true
+local plan={}
+
+while current.layer <= math.floor(order.size.y/3) do
+if current.layer==math.floor(order.size.y/3) and order.size.y%3==0 then break end
+--print("Layer "..current.layer.." Fuel left:"..turtle.getFuelLevel())
+plan,right=plot(A,right)
+follow(plan)
+current.layer=current.layer+1
+saveT("/current.log",current)
+if pos.y==levelmin then break end
+end
+
+
+current.layer=0
+saveT("/current.log",current)
+
+while maplock do sleep(0.01) end
+maplock=true
+order.map[A.x][A.z]=mapmark[1]
+drawmap=true
+saveTH("/order.log",order)
+maplock=false
+end
+
+
+----------------------------------Data Checks, Loading and Imputs-----------------------------
+
+-- Cheecking and loading saved data
+
+local function miniwire()
+	--transmit(number channel, number replyChannel, string message)
+	local small=os.startTimer(0)
+	local temp
+	while true do
+		event={os.pullEvent()}
+		if event[1]=="timer" then
+			if event[2]==small then
+				small=os.startTimer(2)
+				transmit(channel,1,textutils.serialize(current))
+			end
+		end
+		if event[1]=="modem_message" then
+			--print(event[4],":",event[5]," d:",event[6])
+			if event[3]==channel then
+				if event[4]==1 then
+					temp=textutils.unserialize(event[5])
+					if temp then currents[temp.id]=temp currents[temp.id].dist=event[6] currents[temp.id].atime=os.clock() end -- saving brothers data. 
+				end
+			elseif event[3]==gps.CHANNEL_GPS and usegps and pos then transmit(event[4], gps.CHANNEL_GPS, textutils.serialize({pos.x,pos.y,pos.z}))
+			end
+		end
+	end
+end
+
+local function curcheck()
+--reading current
+
+current = getT("/current.log")
+if not current then current={} end
+current.id=os.getComputerID()
+saveT("/current.log",current)
+return true
+
+end
+
+local function setget()
+	local settings
+	term.clear()
+	term.setCursorPos(1,1)
+	print("No Settings File")
+	if yn("Do you want to run local setup?") then
+		while true do
+			settings={}
+			local temp=0
+			settings.manual= (not yn("Do you want to use Enderchests?"))
+			settings.cobbleaway=yn("Do you want me to trow away cobble?")
+			settings.slot={}
+			if not settings.manual then
+				print("You will need to provide 2 enderchests")
+				print("One to send loot, Second to refuel turtle")
+				settings.slot.stuff=1
+				settings.slot.fuel=2
+				temp=temp+2
+			end
+			if settings.cobbleaway then
+				settings.slot.cobble=temp+1
+				settings.slot.mine=temp+1
+				temp=temp+1
+			else
+				settings.slot.mine=temp+1
+			end
+			settings.slot.todrop=temp+1
+			print("In this setup there are "..tostring(temp).." slots taken by items i need")
+			print("Slots from "..tostring(settings.slot.todrop).."-16 will be filled with loot mined")
+			if yn("Are thise Settings correct?") then 
+				print("Settings saved")
+				return settings
+			end
+		end
+	end
+	return nil
+end
+
+local function setcheck()
+	settings = getT("/settings.log")
+
+	if not settings then
+		settings=setget()
+		saveTH("/settings.log",settings)
+	end
+end
+
+local function poscheck()
+
+	pos=nil
+
+	if usegps then
+		term.clear()
+		term.setCursorPos(1,1)
+		print("Determining position")
+
+		local function loop()
+			local i
+			if turtle.forward() then return true end
+			for i=1,3 do turtle.turnLeft() if turtle.forward() then return true end end
+			return false
+		end
+		
+		local pos1,pos2
+		while not pos do
+			if turtle.getFuelLevel()==0 then return false end
+			pos1={gps.locate(2,true)}
+			if pos1[1] then
+				local dir,wd,i="down",0,1
+				while true do
+					if loop() then break end
+					if turtle.detectDown() then dir="up" for i=1,wd do turtle.up() end end
+					if turtle.detectUp() and dir=="up" then break end
+					turtle[dir]() wd=wd+1
+				end
+			end
+			pos2={gps.locate(2,true)}
+			if pos2[1] and pos1[1] then
+				if pos1[1]==pos2[1]
+				and pos1[2]==pos2[2]
+				and pos1[3]==pos2[3] then break end
+				pos={x=pos2[1],y=pos2[2],z=pos2[3],xd=pos2[1]-pos1[1],zd=pos2[3]-pos1[3]}
+				return true
+			end
+			sleep(5)
+		end
+	else
+		pos = getT("/gps.log") -- Standalone mode - loading last known position
+		if not pos then
+			term.clear()
+			term.setCursorPos(1,1)
+			print("No Position File or could not determine position")
+			if yn("Do you want to create one?") then
+				pos=getpos()
+				if pos then saveT("/gps.log",pos) print("Position Saved") return true else print("Error") return false end
+			end
+		end
+	end
+end
+
+
+local function ordwireless()
+	--print("Scanning for Remote Order")
+	local event={}
+	while true do
+		event={os.pullEvent()}
+		if event[1]=="modem_message" then
+			if event[3]==channel then
+				if event[4]==7 and run==false then
+					temp=textutils.unserialize(event[5]) if temp then order=temp run=true status="Running" 	current.loc=nil current.layer=nil saveT("/current.log",current) break end
+				end
+			end
+		end
+	end
+end
+
+local function askfororder() 
+	transmit(channel,3,"Order?")
+	local event={}
+	local timeout=os.startTimer(5)
+	while true do
+		event={os.pullEvent()}
+		if event[1]=="modem_message" then
+			if event[4]==2 then return textutils.unserialize(event[5]) end
+		elseif event[1]=="timer" then
+			if event[2]==timeout then break	end
+		end
+	end
+	return nil
+end
+
+
+local function ordget()
+	local order
+	term.clear()
+	term.setCursorPos(1,1)
+	print("No Order File")
+	if yn("Do you want me to download Order from other swarmites? I need adleas one in range to download")then
+		print("Establishing Connection")
+		order = askfororder()
+		if order then
+			term.clear()
+			term.setCursorPos(1,1)
+			print("Start Point:")
+			print("x:"..order.start.x.." y:"..order.start.y.." z:"..order.start.z.." xd:"..order.start.xd.." zd:"..order.start.zd)
+			print("Manual Dropoff Point:")
+			print("x:"..order.manpos.x.." y:"..order.manpos.y.." z:"..order.manpos.z.." xd:"..order.manpos.xd.." zd:"..order.manpos.zd)
+			print("Sector size: "..order.size.x.."x"..order.size.z.." ,Deapth: "..order.size.y)
+			print("Repeats size: "..order.repeats.x.."x"..order.repeats.z)
+			print("Will mine area total: "..order.size.x*order.repeats.x.."x"..order.size.z*order.repeats.z)
+			if yn("Is this Order correct?") then
+				return order
+			else
+				order=nil
+			end
+		else print("No Swarmites responded to my needs") end
+	end
+	if not order then
+		if yn("Do you want to make Order?") then
+			while true do
+				term.clear()
+				term.setCursorPos(1,1)
+				order={}
+				order.zone={{xl=0,yl=0,zl=0,xu=0,yu=0,zu=0},}
+				print("Enter Coords to of start point mining")
+				order.start={}
+				order.start=getpos()
+				if not order.start then print("Error") return false end
+				
+				while true do
+					term.clear()
+					term.setCursorPos(1,1)	
+					order.size={}
+					order.repeats={},
+					write("Enter lenght size of Sector\n[2-10]:") order.size.x=tonumber(read())
+					write("Enter width  size of Sector\n[2-10]:") order.size.z=tonumber(read())
+					write("Enter how depth down to mine\n[min 3]:") order.size.y=tonumber(read())
+					write("Enter number of lenghtwise sector repeats:") order.repeats.x=tonumber(read())
+					write("Enter number of widthwise  sector repeats:") order.repeats.z=tonumber(read())
+					if order.size.y and order.size.y <3 then order.size.y=nil end
+					if order.size.x<2 or order.size.x>10 then order.size.x=nil end
+					if order.size.z<2 or order.size.z>10 then order.size.z=nil end
+					if order.size.x and order.size.y and order.size.z and order.repeats.x and order.repeats.z then
+						print("Sector size: "..order.size.x.."x"..order.size.z.." ,Deapth: "..order.size.y)
+						print("Repeats size: "..order.repeats.x.."x"..order.repeats.z)
+						print("Will mine area total: "..order.size.x*order.repeats.x.."x"..order.size.z*order.repeats.z)
+						if yn("Are thise correct?") then break end
+					end
+				end	
+				
+				term.clear()
+				term.setCursorPos(1,1)	
+				order.manpos={}
+				if yn("Do you want to manual dropoff point to ba same as start point?")
+				then
+					order.manpos={x=order.start.x,y=order.start.y,z=order.start.z,xd=-order.start.xd,zd=-order.start.zd}
+				else
+					print(" Specify costum drop off point")
+					order.manpos=getpos()
+				end
+				if not order.manpos then print("Error") return false end
+				term.clear()
+				term.setCursorPos(1,1)
+				print("Start Point:")
+				print("x:"..order.start.x.." y:"..order.start.y.." z:"..order.start.z.." xd:"..order.start.xd.." zd:"..order.start.zd)
+				print("Manual Dropoff Point:")
+				print("x:"..order.manpos.x.." y:"..order.manpos.y.." z:"..order.manpos.z.." xd:"..order.manpos.xd.." zd:"..order.manpos.zd)
+				print("Sector size: "..order.size.x.."x"..order.size.z.." ,Deapth: "..order.size.y)
+				print("Repeats size: "..order.repeats.x.."x"..order.repeats.z)
+				order.map=newMap(order.repeats.x,order.repeats.z)
+				
+				if yn("Is this Order correct?") then 
+					print("Order saved")
+					return order
+				end
+
+			end
+		end
+	end
+end
+
+local function ordcheck()
+
+	--order setting
+
+	order = getT("/order.log")
+
+	if not order then
+		current.loc=nil current.layer=nil
+		saveT("/current.log",current)
+		order=ordget()
+		saveTH("/order.log",order)
+	end
+end
+
+
+------------------------------MAIN 3-----------------------------
+
+
+--Screen Controls (Added Screen Freeze code - there is no need to paint screen if noone is looking)
+
+local function monitor()
+	local i,k,j,l,event
+	local deactive
+	local deactivetime
+	local update
+
+	local function wmap(A,B)
+		if current.loc and current.loc.x==A and current.loc.z==B then
+			term.setTextColor(colors.black)
+			term.setBackgroundColor(colors.white)
+			write(order.map[A][B])
+			term.setTextColor(colors.white)
+			term.setBackgroundColor(colors.black)
+		else
+			write(order.map[A][B])
+		end
+	end
+	
+	local function stable()
+		i=9
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("Ctrl T-Terminate")
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("P-Pause")
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("O-Unpause")
+		for i=1,13 do
+			term.setCursorPos(14,i)	
+			write("|")
+		end
+	end
+	
+	term.clear()
+	term.setCursorPos(1,1)
+	if monactive then
+	drawmap=true
+	update=os.startTimer(0.2)
+	deactive=os.startTimer(10)
+	deactivetime=os.time()+10
+	stable()
+	else
+	print("Screen Paused - press any key to reactivate screen. If Screen don't reactivate infrom Wojbie about bug")
+	stamp(5)
+	end
+
+while true do 
+	event={os.pullEvent()}
+		if event[1]=="key" and not monactive then monactive=true drawmap=true update=os.startTimer(0.2) deactive=os.startTimer(30) deactivetime=os.time()+30 term.clear() stable()
+	elseif event[1]=="timer" then
+		if event[2]==deactive then monactive=false term.clear() term.setCursorPos(1,1) print("Screen Paused - press any key to reactivate screen. If Screen don't reactivate infrom Wojbie about bug")	stamp(5)
+	elseif event[2]==update and monactive then
+		update=os.startTimer(0.2)
+		if drawmap then
+			drawmap=false
+
+			if order.repeats.z < 13 or not current.loc then l=0 else l=math.max(math.min(order.repeats.z-13,current.loc.z-7),0) end
+			if order.repeats.x < 13 or not current.loc then j=0 else j=math.max(math.min(order.repeats.x-13,current.loc.x-7),0) end
+
+			term.setCursorPos(1,1)	
+			for i=1,math.min(order.repeats.x,13) do
+				term.setCursorPos(1,14-i)
+				for k=1,math.min(order.repeats.z,13) do
+						wmap(i+j,k+l)
+				end
+			end
+		end
+
+		i=1
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("x:"..pos.x.." y:"..pos.y.." z:"..pos.z)
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("id: "..os.getComputerID().." f:"..xtface(pos.xd,pos.zd)) if current.layer then write(" Layer:"..current.layer) end
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		if current.loc then write("Current Sector:"..current.loc.x.."x"..current.loc.z) end
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("Sector Size:"..order.size.x.."x"..order.size.z.." y: "..order.size.y)
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("Repeat All:"..order.repeats.x.."x"..order.repeats.z)
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("Area total:"..order.size.x*order.repeats.x.."x"..order.size.z*order.repeats.z)
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write("Fuel left:"..turtle.getFuelLevel())
+
+		i=13
+		term.setCursorPos(15,i)	for l=0,39-15 do write(" ")	end term.setCursorPos(15,i) i=i+1
+		write(status)
+		if ldebug then
+			write("  ")
+			write(deactivetime-os.time())
+		end
+	end
+	end
+end
+print("I should not get printed - If i was inform Wojbie about it. Also Cheescake!!!!")
+end
+
+--Wireless Part (In Fact its most event handler but i like to call it wireless)
+
+local function wireless()
+	--modem.transmit(number channel, number replyChannel, string message)
+	local event={}
+	local temp
+	local small=os.startTimer(0)
+	local big=os.startTimer(math.random(0,10))
+	local fiveminreset--=os.startTimer(300+math.random(0,100)) -- 5-6 Min Reboot on turtle - crude debug code but works. Do NOT UNCOMMENT!!
+	while true do
+		event={os.pullEvent()}
+		if event[1]=="modem_message" then
+			--print(event[4],":",event[5]," d:",event[6])
+			if event[3]==channel then
+				if event[4]==1 then
+					temp=textutils.unserialize(event[5])
+					if temp then
+						currents[temp.id]=temp currents[temp.id].dist=event[6] currents[temp.id].atime=os.clock() -- saving brothers data.
+						if temp.loc and current.loc then
+							if temp.loc.x==current.loc.x and temp.loc.z==current.loc.z and temp.layer and current.layer then
+								if temp.layer<current.layer then --nothing
+								elseif temp.id>current.id then --nothing
+								else
+								current.loc=nil current.layer=0 run=true while movelock do sleep(0.01) end break --Break Mine if someone else is deeper than me or he is older than me.
+								end
+							end	
+						end
+					end
+				elseif event[4]==2 then
+					temp=textutils.unserialize(event[5])
+					if temp then
+						if compOr(order,temp) then
+							while maplock do sleep(0.01) end
+							maplock=true
+							order.map=merMap(order.map,temp.map) 
+							drawmap=true
+							saveTH("/order.log",order)
+							maplock=false	
+							if current.loc then if order.map[current.loc.x][current.loc.z]==mapmark[1] then current.loc=nil current.layer=0 run=true while movelock do sleep(0.01) end break end end --Break Mine if someone reports that this area is mined.
+						end	
+					end
+				elseif event[4]==3 and event[5]=="Order?" then big=os.startTimer(0)
+				elseif event[4]==4 and event[5]=="Pause" then run=false status="Paused" while movelock do sleep(0.01) end break -- pause
+				elseif event[4]==5 and event[5]=="UnPause" then run=true status="Running" while movelock do sleep(0.01) end break -- unpause
+				elseif event[4]==6 and run==false then
+					temp=textutils.unserialize(event[5]) if temp then status="Goto Active" parallel.waitForAny(miniwire,function() goto(temp,0,10) end)  status="Paused" end
+				elseif event[4]==7 and run==false then
+					temp=textutils.unserialize(event[5]) if temp then order=temp saveTH("/order.log",order) current.loc=nil current.layer=0 saveT("/current.log",current)  end
+				elseif event[4]==channel and event[5]=="Terminate" then os.queueEvent("terminate") run=false terminate=true end	
+			elseif event[3]==gps.CHANNEL_GPS and usegps then transmit(event[4], gps.CHANNEL_GPS, textutils.serialize({pos.x,pos.y,pos.z}))
+			end
+		elseif event[1]=="timer" then
+			if event[2]==small then
+				small=os.startTimer(2)
+				current.pos=pos
+				current.fuel=getFuelLevel()
+				transmit(channel,1,textutils.serialize(current))
+			elseif event[2]==big then
+				big=os.startTimer(10)
+				transmit(channel,2,textutils.serialize(order))
+			elseif event[2]==rebootimer then --Canceling Ctrl-r/s alert
+				reboot=false status="Freeze Canceled"
+			elseif event[2]==fiveminreset then --debug timer - unused in normal code - do not use!!
+				run=current.run while movelock do sleep(0.01) end break 
+			end
+		elseif event[1]=="key" then
+			if event[2]==19 or event[2]==31 then
+				if not testforchar(event[2]) then --detecting ctrl+r/s situation
+					rebootimer=os.startTimer(2) reboot=true status="Ctrl+"..keys.getName(event[2]).." Detected"
+				end	
+			end
+		elseif event[1]=="char" then
+			if event[2]=="p" or event[2]=="P" then run=false status="Paused" while movelock do sleep(0.01) end break -- pause
+			elseif event[2]=="o" or  event[2]=="O" then run=true status="Running" while movelock do sleep(0.01) end break  end	-- unpause
+		elseif event[1]=="terminate" then
+			while movelock do sleep(0.01) end
+			run=false terminate=true
+			print("Terminate Event")
+			break
+		elseif event[1]=="toggle" then --old code - unused - left as template.
+			while movelock do sleep(0.01) end break
+		end
+	end
+
+end
+
+--Main Program
+
+local function work()
+	transmit(channel,3,"Order?")
+	sleep(2)
+	fullcheack()
+	local j,l=0,0
+	local dist,tdist,i,k,find
+	if current.loc then
+		minepart(current.loc)
+	else
+		current.loc={x=0,z=0}--{x=math.random(1,math.min(order.repeats.x,10)),z=math.random(1,math.min(order.repeats.z,10))}
+	end
+	j=current.loc.x l=current.loc.z
+	while true do
+		find=false
+		dist=order.repeats.x+order.repeats.z
+		for i=1,order.repeats.x do
+			for k=1,order.repeats.z do
+				if order.map[i][k] == mapmark[3] then
+						tdist=math.abs(j-i)+math.abs(l-k)
+						--print(i,"x",k," c:",tdist," d:",dist)
+						if dist > tdist or tdist==0 then find=true current.loc={x=i,z=k} dist=tdist end
+				end
+			end
+		end
+		--print(current.loc.x,"x",current.loc.z," d:",dist) read()
+		if not find then break end
+		saveT("/current.log",current)
+		j=current.loc.x l=current.loc.z minepart(current.loc)
+	end
+	current.loc=nil
+	saveT("/current.log",current)
+	if working then maintence(true)
+		goto({x=order.start.x+math.random(0,order.size.x-1)*order.start.xd+math.random(0,order.size.z-1)*(-order.start.zd),
+		y=order.start.y-math.random(0,math.min(order.size.y,9)),
+		z=order.start.z+math.random(0,order.size.x-1)*order.start.zd+math.random(0,order.size.z-1)*order.start.xd,
+		xd=order.start.xd,zd=order.start.zd},0,10)
+		working=false
+	end
+	status="Work Done"
+end
+
+
+
+
+------------------------------PROGRAM START-----------------------------
+
+
+--sleep so it wont bug later
+sleep(0.01+math.random(1,99)/100)
+
+--pre setup setup
+local label="Swarminer id:"..os.getComputerID()
+if os.getComputerLabel~=(label) then os.setComputerLabel(label) end
+if usegps then local temp temp={gps.locate(2)} pos={x=temp[1],y=temp[2],z=temp[3]} current.pos={x=temp[1],y=temp[2],z=temp[3]} print(textutils.serialize(pos)) end
+
+
+--tArgs setup
+local i,ni
+for ni,i in pairs(tArgs) do
+	if i=="instalation" then
+		curcheck()
+		fs.delete("/settings.log")
+		if fs.exists(tArgs[ni+1].."settings.log") then fs.copy(tArgs[ni+1].."settings.log","/settings.log") end
+		parallel.waitForAny(setcheck,miniwire)
+		if settings then saveT("/settings.log",settings) saveTH(tArgs[ni+1].."settings.log",settings) end
+		
+		fs.delete("/order.log")
+		if fs.exists(tArgs[ni+1].."order.log") then  fs.copy(tArgs[ni+1].."order.log","/order.log") end
+		parallel.waitForAny(ordcheck,miniwire)
+		if order then saveTH("/order.log",order) saveTH(tArgs[ni+1].."order.log",order) end
+		
+		fs.delete("/current.log")
+		
+		slotask()
+		if getFuelLevel()<100+(order.size.x*order.repeats.x+order.size.z*order.repeats.z) then
+			if settings.manual then
+				refside("Up",100+(order.size.x*order.repeats.x+order.size.z*order.repeats.z),false,true)
+			else
+				refside("Up",100+(order.size.x*order.repeats.x+order.size.z*order.repeats.z),true,true)
+			end
+		end
+		
+		local function loop()
+			local i
+			if turtle.forward() then return true end
+			for i=1,3 do turtle.turnLeft() if turtle.forward() then return true end end
+			return false
+		end
+		loop()
+		
+		os.reboot()
+		
+		return true
+	elseif i=="create" then
+		if fs.exists(tArgs[ni+1].."settings.log") then print("Preformated Settings Detected") end
+		if yn("Do you want to preformat a new settings file?") then
+			saveTH(tArgs[ni+1].."settings.log",setget())
+			print("Settings Saved on Floppy disk")
+		end
+		if fs.exists(tArgs[ni+1].."order.log") then print("Preformated Order Detected") end
+		if yn("Do you want to preformat a new order file?") then
+			saveTH(tArgs[ni+1].."order.log",ordget())
+			print("Order Saved on Floppy disk")
+		end
+		return true
+	elseif i=="debug" then ldebug=true
+	elseif i=="?" or i=="help" then print("debug/pause/unpause/gotoStart/sendOrder/newMap") return true
+	elseif i=="pause" then print("paused all") transmit(channel,4,"Pause") return true
+	elseif i=="unpause" then print("unpaused all") transmit(channel,5,"UnPause") return true
+	elseif i=="gotoStart" then print("Goto send to all paused") transmit(channel,6,textutils.serialize(getT("/order.log").start)) return true
+	elseif i=="sendOrder" then print("Order send to all paused") transmit(channel,7,textutils.serialize(getT("/order.log"))) return true
+	elseif i=="newMap" then print("New map generated") order = getT("/order.log") order.map=newMap(order.repeats.z,order.repeats.z) saveTH("/order.log",order) return true
+	else return true end
+end
+
+curcheck()
+parallel.waitForAny(setcheck,miniwire) -- if no settings asks for them
+parallel.waitForAny(poscheck,miniwire) -- looks for position until finds it
+parallel.waitForAny(ordcheck,ordwireless,miniwire)
+if not pos or not order or not settings or not current then print("Somewing went wong") return false end
+if usegps and modem then modem.open(gps.CHANNEL_GPS) else modem.close(gps.CHANNEL_GPS) end --starting up and shutting down gps channel
+
+-- adding dropoff point to zone file
+order.zone["dropoff"]={xl=order.manpos.x,yl=order.manpos.y,zl=order.manpos.z,xu=order.manpos.x+order.manpos.xd,yu=order.manpos.y+1,zu=order.manpos.z+order.manpos.zd}
+
+normZone()  -- normalize Zonefile
+slotcheck()
+slotask()
+
+--debug print
+
+if ldebug then
+	term.clear()
+	term.setCursorPos(1,1)
+	write("x:"..pos.x.." y:"..pos.y.." z:"..pos.z.." f:"..xtface(pos.xd,pos.zd))
+	if current.layer then print(" Layer:"..current.layer) else print() end
+	if settings.manual then print("Dropof to point") else print("Dropof to Enderchest") end
+	if settings.cobbleaway then print("Trowing Cobble away") else print("Collecting all") end
+	print("Sector size: "..order.size.x.."x"..order.size.z.." ,Deapth: "..order.size.y) 
+	print("Repeats size: "..order.repeats.x.."x"..order.repeats.z)
+	print("Will mine area total: "..order.size.x*order.repeats.x.."x"..order.size.z*order.repeats.z)
+	if not yn("Run Program Now?") then return end
+end
+
+
+
+--Non-termination point
+local oldpullEvent=os.pullEvent
+os.pullEvent=os.pullEventRaw
+
+repeat
+current.run = run
+drawmap=true
+slotcheck()
+
+if run then
+	run=false
+	parallel.waitForAny(monitor,work,wireless) --working
+	if terminate then break end
+else
+	parallel.waitForAny(monitor,wireless) --awaiting orders
+	if terminate then break end
+end
+
+until terminate
+
+--Restoring normal termination
+os.pullEvent=oldpullEvent

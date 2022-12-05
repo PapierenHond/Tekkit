@@ -1,0 +1,21 @@
+--Work in Progres - turtle sendout program
+
+rs.setOutput("front",true)
+while true do
+turtle.select(1)
+if not turtle.suckDown() then break end
+turtle.dropDown(turtle.getItemCount(1)-1)
+while turtle.detect() do sleep(1) end
+turtle.place()
+
+for i=2,4 do
+	if turtle.getItemCount(i)>0 then
+		turtle.select(i)
+		turtle.drop(1)
+	end
+end
+
+sleep(0.1)
+peripheral.call("front","turnOn")
+end
+rs.setOutput("front",false)

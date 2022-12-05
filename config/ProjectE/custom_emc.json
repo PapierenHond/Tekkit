@@ -1,0 +1,2792 @@
+{
+  "entries": [
+    {
+      "item": "ic2:itemmisc|180",
+      "emc": 4096
+    },
+    {
+      "item": "ic2:itemmisc|55",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftbuilders:quarry|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftcore:engine|2",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftcore:engine|1",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftcore:engine|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:engine_peat|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:engine_biogas|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:engine_clockwork|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:engine_electrical|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:engine_generator|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:machine|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:stone|4",
+      "emc": 1
+    },
+    {
+      "item": "projectred-exploration:stone|2",
+      "emc": 1
+    },
+    {
+      "item": "projectred-exploration:stone|3",
+      "emc": 1
+    },
+    {
+      "item": "projectred-exploration:stone|0",
+      "emc": 1
+    },
+    {
+      "item": "projectred-exploration:stone|1",
+      "emc": 1
+    },
+    {
+      "item": "ic2:blockmetal|12",
+      "emc": 288
+    },
+    {
+      "item": "ic2:itemmisc|450",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemharz|0",
+      "emc": 64
+    },
+    {
+      "item": "projectred-core:resource_item|200",
+      "emc": 1024
+    },
+    {
+      "item": "projectred-core:resource_item|201",
+      "emc": 1024
+    },
+    {
+      "item": "projectred-core:resource_item|202",
+      "emc": 1024
+    },
+    {
+      "item": "cableflux:fec_1|0",
+      "emc": 0
+    },
+    {
+      "item": "cableflux:fec_2|0",
+      "emc": 0
+    },
+    {
+      "item": "cableflux:fec_3|0",
+      "emc": 0
+    },
+    {
+      "item": "fluxcables:cable_lv|0",
+      "emc": 0
+    },
+    {
+      "item": "fluxcables:cable_mv|0",
+      "emc": 0
+    },
+    {
+      "item": "fluxcables:cable_hv|0",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemcellempty|2",
+      "emc": 128
+    },
+    {
+      "item": "railcraft:ingot|8",
+      "emc": 256
+    },
+    {
+      "item": "projectred-core:resource_item|105",
+      "emc": 128
+    },
+    {
+      "item": "projectred-core:resource_item|104",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|103",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:dust|2",
+      "emc": 72
+    },
+    {
+      "item": "forestry:apatite|0",
+      "emc": 32
+    },
+    {
+      "item": "forestry:humus|0",
+      "emc": 0
+    },
+    {
+      "item": "quark:limestone|0",
+      "emc": 1
+    },
+    {
+      "item": "stevescarts:modulecomponents|21",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemmisc|53",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemmisc|12",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemmisc|6",
+      "emc": 0
+    },
+    {
+      "item": "forestry:bottler|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:carpenter|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:centrifuge|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:fermenter|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:moistener|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:squeezer|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:still|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:fabricator|0",
+      "emc": 0
+    },
+    {
+      "item": "additionalpipes:pipe_items_switch|0",
+      "emc": 0
+    },
+    {
+      "item": "additionalpipes:pipe_items_adv_wood|0",
+      "emc": 0
+    },
+    {
+      "item": "additionalpipes:pipe_items_distribution|0",
+      "emc": 0
+    },
+    {
+      "item": "additionalpipes:pipe_items_gravity_feed|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_wood_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_quartz_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_iron_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_gold_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_clay_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_sandstone_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_void_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_obsidian_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_diamond_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_diamond_wood_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_lapis_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_daizuli_item|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_stripes_item|0",
+      "emc": 0
+    },
+    {
+      "item": "logisticspipes:pipe_transport_basic|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-transportation:pipe|32",
+      "emc": 0
+    },
+    {
+      "item": "projectred-transportation:pipe|33",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:gear|3",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftcore:gear_wood|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:wrench|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:sturdy_machine|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftsilicon:laser|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:computer|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:computer|16384",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:pocket_computer|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:pocket_computer|1",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:disk_expanded|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:peripheral|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:peripheral|1",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:peripheral|2",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:peripheral|3",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:peripheral|4",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:peripheral|5",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:advanced_modem|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:cable|0",
+      "emc": 0
+    },
+    {
+      "item": "computercraft:cable|1",
+      "emc": 0
+    },
+    {
+      "item": "chisel:auto_chisel|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:iron_note_block|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:audio_cable|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:speaker|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:camera|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:chat_box|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:cipher|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:radar|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:colorful_lamp|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:parts|0",
+      "emc": 0
+    },
+    {
+      "item": "computronics:relay_sensor|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:block_light|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:block_light|2",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:howler_alarm|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:info_panel_extender|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:thermometer|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:timer|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:kit_assembler|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:item_component|3",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:item_upgrade|1",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:item_upgrade|2",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:item_card|18",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:item_card|19",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:card_holder|0",
+      "emc": 0
+    },
+    {
+      "item": "energycontrol:item_component|4",
+      "emc": 0
+    },
+    {
+      "item": "exchangers:exchanger_core_tier1|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:fertilizer_bio|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:fertilizer_compound|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:pipette|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:naturalist_helmet|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:bog_earth|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:smoker|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:scoop|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:habitat_locator|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:frame_untreated|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:oxygen_mask|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:parachute|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftplanets:item_basic_mars|4",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftplanets:item_basic_asteroids|7",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftplanets:grapple|0",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemmisc|0",
+      "emc": 256
+    },
+    {
+      "item": "ic2:itemmisc|1",
+      "emc": 2048
+    },
+    {
+      "item": "ic2:itemmisc|5",
+      "emc": 512
+    },
+    {
+      "item": "ic2:itemmisc|3",
+      "emc": 256
+    },
+    {
+      "item": "ic2:itemmisc|2",
+      "emc": 128
+    },
+    {
+      "item": "ic2:itemmisc|4",
+      "emc": 160
+    },
+    {
+      "item": "ic2:itemmisc|253",
+      "emc": 0
+    },
+    {
+      "item": "akashictome:tome|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:book_forester|0",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:book_manual|0",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|0",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|1",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|2",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|3",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|4",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|5",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|6",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|7",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|8",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|9",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|10",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|11",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|12",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|13",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|14",
+      "emc": 0
+    },
+    {
+      "item": "industrialforegoing:laser_lens_inverted|15",
+      "emc": 0
+    },
+    {
+      "item": "logisticspipes:chip_basic_raw|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|600",
+      "emc": 0
+    },
+    {
+      "item": "logisticspipes:chip_fpga_raw|0",
+      "emc": 0
+    },
+    {
+      "item": "logisticspipes:frame|0",
+      "emc": 0
+    },
+    {
+      "item": "logisticspipes:disk|0",
+      "emc": 0
+    },
+    {
+      "item": "logisticspipes:module_blank|0",
+      "emc": 0
+    },
+    {
+      "item": "playerplates:obsidian_plate|0",
+      "emc": 0
+    },
+    {
+      "item": "playerplates:mossy_plate|0",
+      "emc": 0
+    },
+    {
+      "item": "plethora:neuralconnector|0",
+      "emc": 0
+    },
+    {
+      "item": "plethora:module|0",
+      "emc": 0
+    },
+    {
+      "item": "plethora:module|2",
+      "emc": 0
+    },
+    {
+      "item": "plethora:module|3",
+      "emc": 0
+    },
+    {
+      "item": "plethora:module|5",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|421",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|500",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|501",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|502",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|503",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|504",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|505",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|506",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|507",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|508",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|515",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|514",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|513",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|512",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|511",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|510",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|509",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:screwdriver|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:charged_battery|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:machine2|10",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:plan|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:machine2|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:machine2|1",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:machine2|2",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:machine2|3",
+      "emc": 0
+    },
+    {
+      "item": "projectred-expansion:machine2|4",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|1",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|2",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|3",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|4",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|5",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|6",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|7",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|8",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:athame|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|15",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|14",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|13",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|12",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|11",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|10",
+      "emc": 0
+    },
+    {
+      "item": "projectred-exploration:backpack|9",
+      "emc": 0
+    },
+    {
+      "item": "projectred-fabrication:ic_machine|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-fabrication:ic_machine|1",
+      "emc": 0
+    },
+    {
+      "item": "projectred-fabrication:ic_blueprint|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|1",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|10",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|11",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|12",
+      "emc": 0
+    },
+    {
+      "item": "projectred-relocation:frame|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-transportation:router_utility|0",
+      "emc": 0
+    },
+    {
+      "item": "quark:smoker|0",
+      "emc": 128
+    },
+    {
+      "item": "quark:glowshroom|0",
+      "emc": 64
+    },
+    {
+      "item": "quark:tallow|0",
+      "emc": 64
+    },
+    {
+      "item": "quark:crab_leg|0",
+      "emc": 64
+    },
+    {
+      "item": "railcraft:detector|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|1",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|2",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|3",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|4",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|5",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|6",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|8",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|9",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|10",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|11",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|12",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:detector|13",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:signal_box|6",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:signal_box|1",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:actuator|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:tool_crowbar_iron|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:tool_magnifying_glass|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:armor_overalls|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:manipulator|8",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:equipment|3",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:filter_blank|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:worldspike|3",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:worldspike_point|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:worldspike|2",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:tool_charge_meter|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:coke_oven|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:blast_furnace|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:backpack_apothecary_t1|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:backpack_iceman_t1|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:tool_signal_surveyor|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:signal_lamp|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:boiler_firebox_solid|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:concrete|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:tool_spike_maul_iron|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:routing_table|0",
+      "emc": 0
+    },
+    {
+      "item": "testdummy:dummy|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:arrow_bundle|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:nest_of_bees|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:firerod|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:musket_barrel|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:blunderbuss_barrel|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:gun_stock|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:musket_bullet|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:blunderbuss_bullet|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_battleaxe|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_battleaxe|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_battleaxe|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_battleaxe|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_battleaxe|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_saber|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_saber|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_saber|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_saber|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_saber|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_knife|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_knife|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_knife|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_knife|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_knife|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_katana|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_katana|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_katana|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_katana|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_katana|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:javelin|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:keris|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:dart_normal|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:blowgun|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:dynamite|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:crossbow|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:crossbow_bolt|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_pike|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_pike|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_pike|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_pike|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_pike|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_mace|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_mace|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_mace|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_mace|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_mace|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:wooden_dirk|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:stone_dirk|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:golden_dirk|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:iron_dirk|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:diamond_dirk|0",
+      "emc": 0
+    },
+    {
+      "item": "reforged:caltrop|0",
+      "emc": 0
+    },
+    {
+      "item": "statues:hammer|0",
+      "emc": 0
+    },
+    {
+      "item": "statues:palette|0",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|9",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|30",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|63",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|0",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|1",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|2",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|3",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|4",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|5",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|6",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|11",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|14",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|15",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|18",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|24",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|29",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|33",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|40",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|42",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|43",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|44",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|45",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|60",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|8",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|0",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|65",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:modulecomponents|83",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|25",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|16",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|13",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|33",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|40",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|42",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|44",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|68",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:cartmodule|69",
+      "emc": 0
+    },
+    {
+      "item": "teslacorelib:machine_case|0",
+      "emc": 0
+    },
+    {
+      "item": "translocators:translocator_part|0",
+      "emc": 0
+    },
+    {
+      "item": "translocators:translocator_part|1",
+      "emc": 0
+    },
+    {
+      "item": "wrcbe:material|2",
+      "emc": 0
+    },
+    {
+      "item": "wrcbe:material|0",
+      "emc": 0
+    },
+    {
+      "item": "wrcbe:material|1",
+      "emc": 0
+    },
+    {
+      "item": "wrcbe:tracker|0",
+      "emc": 0
+    },
+    {
+      "item": "zettaindustries:batterywall|0",
+      "emc": 0
+    },
+    {
+      "item": "zettaindustries:blockgraphite|0",
+      "emc": 0
+    },
+    {
+      "item": "zettaindustries:variableredstoneemitter|0",
+      "emc": 0
+    },
+    {
+      "item": "craftingtableiv:craftingtableiv|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:logbook|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:routing_ticket_gold|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:ic2compat|0",
+      "emc": 128
+    },
+    {
+      "item": "botany:botanist_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "botany:soil_meter|0",
+      "emc": 0
+    },
+    {
+      "item": "binniecore:storage|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|5",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|4",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|6",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|7",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|8",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|9",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:misc|11",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:hammer|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:durable_hammer|0",
+      "emc": 0
+    },
+    {
+      "item": "genetics:misc|1",
+      "emc": 0
+    },
+    {
+      "item": "genetics:misc|2",
+      "emc": 0
+    },
+    {
+      "item": "genetics:misc|4",
+      "emc": 0
+    },
+    {
+      "item": "genetics:misc|5",
+      "emc": 0
+    },
+    {
+      "item": "genetics:misc|6",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftcore:marker_volume|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftcore:marker_path|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:plug_blocker|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:waterproof|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:cheese_curd|0",
+      "emc": 32
+    },
+    {
+      "item": "projecte:item.pe_catalitic_lens|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_morning_star|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_katar|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_void_ring|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_arcana_ring|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_transmutation_tablet|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_gem_armor_0|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_gem_armor_1|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_gem_armor_2|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_gem_armor_3|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_hyperkinetic_lens|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_destruction_catalyst|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_volcanite_amulet|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_evertide_amulet|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_ring_iron_band|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_mind_stone|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_soul_stone|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_body_stone|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_mercurial_eye|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_time_watch|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_gem_density|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_divining_rod_1|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_divining_rod_2|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_divining_rod_3|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_hammer|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_shears|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_hoe|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_sword|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_shovel|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_axe|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_pick|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_hammer|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_shears|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_hoe|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_sword|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_shovel|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_axe|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_pick|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_armor_0|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_armor_1|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_armor_2|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_rm_armor_3|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_armor_0|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_armor_1|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_armor_2|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_dm_armor_3|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_repair_talisman|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_philosophers_stone|0",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|14",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|15",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|13",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|12",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|11",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|10",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|9",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|8",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|7",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|6",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|5",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|4",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|3",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|2",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|1",
+      "emc": 0
+    },
+    {
+      "item": "projecte:item.pe_alchemical_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_cobble_power|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcrafttransport:pipe_stone_power|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:ic2compat|2",
+      "emc": 128
+    },
+    {
+      "item": "botany:misc|7",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftbuilders:snapshot|0",
+      "emc": 0
+    },
+    {
+      "item": "buildcraftbuilders:snapshot|2",
+      "emc": 0
+    },
+    {
+      "item": "chisel:chisel_hitech|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:forester_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:adventurer_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:prelaunch_checklist|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|300",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:cart_redstone_flux|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:cart_work|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:cart_jukebox|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:cart_bed|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:cart_tnt_wood|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:cart_cargo|0",
+      "emc": 0
+    },
+    {
+      "item": "stevescarts:blockadvdetector|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:generic|8",
+      "emc": 32
+    },
+    {
+      "item": "quark:elder_prismarine|0",
+      "emc": 128
+    },
+    {
+      "item": "quark:glowcelium|0",
+      "emc": 64
+    },
+    {
+      "item": "quark:biome_cobblestone|2",
+      "emc": 16
+    },
+    {
+      "item": "quark:biome_cobblestone|0",
+      "emc": 64
+    },
+    {
+      "item": "quark:biome_cobblestone|1",
+      "emc": 64
+    },
+    {
+      "item": "railcraft:brick_abyssal|5",
+      "emc": 32
+    },
+    {
+      "item": "ic2:blockrubwood|0",
+      "emc": 32
+    },
+    {
+      "item": "galacticraftplanets:venus|2",
+      "emc": 64
+    },
+    {
+      "item": "galacticraftplanets:venus|3",
+      "emc": 16
+    },
+    {
+      "item": "galacticraftplanets:dense_ice|0",
+      "emc": 2
+    },
+    {
+      "item": "galacticraftcore:basic_block_moon|3",
+      "emc": 2
+    },
+    {
+      "item": "galacticraftcore:basic_block_moon|4",
+      "emc": 2
+    },
+    {
+      "item": "galacticraftcore:basic_block_moon|5",
+      "emc": 2
+    },
+    {
+      "item": "galacticraftplanets:mars|4",
+      "emc": 4
+    },
+    {
+      "item": "galacticraftplanets:mars|5",
+      "emc": 4
+    },
+    {
+      "item": "galacticraftplanets:mars|6",
+      "emc": 4
+    },
+    {
+      "item": "galacticraftplanets:mars|9",
+      "emc": 4
+    },
+    {
+      "item": "galacticraftplanets:asteroids_block|0",
+      "emc": 8
+    },
+    {
+      "item": "galacticraftplanets:asteroids_block|1",
+      "emc": 8
+    },
+    {
+      "item": "galacticraftplanets:venus|1",
+      "emc": 8
+    },
+    {
+      "item": "galacticraftplanets:venus|0",
+      "emc": 8
+    },
+    {
+      "item": "galacticraftplanets:asteroids_block|2",
+      "emc": 8
+    },
+    {
+      "item": "forestry:sapling|0",
+      "emc": 0
+    },
+    {
+      "item": "minecraft:enchanted_book|0",
+      "emc": 0
+    },
+    {
+      "item": "projectred-core:resource_item|420",
+      "emc": 0
+    },
+    {
+      "item": "galacticraftcore:canvas|0",
+      "emc": 0
+    },
+    {
+      "item": "fairylights:ladder|0",
+      "emc": 0
+    },
+    {
+      "item": "fairylights:letter_bunting|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:builder_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:backpack_trackman_t1|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:hunter_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:digger_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:miner_bag|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:worktable|0",
+      "emc": 0
+    },
+    {
+      "item": "chiselsandbits:bittank|0",
+      "emc": 0
+    },
+    {
+      "item": "chiselsandbits:tape_measure|0",
+      "emc": 0
+    },
+    {
+      "item": "chiselsandbits:mirrorprint|0",
+      "emc": 0
+    },
+    {
+      "item": "chiselsandbits:negativeprint|0",
+      "emc": 0
+    },
+    {
+      "item": "chiselsandbits:positiveprint|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:grafter|0",
+      "emc": 0
+    },
+    {
+      "item": "ic2:blockmetal|9",
+      "emc": 0
+    },
+    {
+      "item": "ic2:itemmisc|52",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:nugget|5",
+      "emc": 0
+    },
+    {
+      "item": "minecraft:minecart|0",
+      "emc": 1280
+    },
+    {
+      "item": "railcraft:abyssal_stone|0",
+      "emc": 32
+    },
+    {
+      "item": "railcraft:abyssal|1",
+      "emc": 32
+    },
+    {
+      "item": "railcraft:abyssal|0",
+      "emc": 32
+    },
+    {
+      "item": "railcraft:abyssal|5",
+      "emc": 32
+    },
+    {
+      "item": "railcraft:sandy|0",
+      "emc": 34
+    },
+    {
+      "item": "railcraft:sandy|1",
+      "emc": 34
+    },
+    {
+      "item": "railcraft:sandy|5",
+      "emc": 34
+    },
+    {
+      "item": "ic2:itemcellempty|0",
+      "emc": 64
+    },
+    {
+      "item": "railcraft:bleachedbone|0",
+      "emc": 216
+    },
+    {
+      "item": "railcraft:bleachedbone|1",
+      "emc": 216
+    },
+    {
+      "item": "railcraft:bleachedbone|5",
+      "emc": 216
+    },
+    {
+      "item": "railcraft:bloodstained|0",
+      "emc": 36
+    },
+    {
+      "item": "railcraft:bloodstained|1",
+      "emc": 36
+    },
+    {
+      "item": "railcraft:bloodstained|5",
+      "emc": 36
+    },
+    {
+      "item": "railcraft:frostbound|1",
+      "emc": 112
+    },
+    {
+      "item": "railcraft:frostbound|0",
+      "emc": 112
+    },
+    {
+      "item": "railcraft:frostbound|5",
+      "emc": 112
+    },
+    {
+      "item": "railcraft:infernal|5",
+      "emc": 53
+    },
+    {
+      "item": "railcraft:infernal|0",
+      "emc": 53
+    },
+    {
+      "item": "railcraft:infernal|1",
+      "emc": 53
+    },
+    {
+      "item": "railcraft:badlands|1",
+      "emc": 34
+    },
+    {
+      "item": "railcraft:badlands|0",
+      "emc": 34
+    },
+    {
+      "item": "railcraft:badlands|5",
+      "emc": 34
+    },
+    {
+      "item": "railcraft:nether|5",
+      "emc": 4
+    },
+    {
+      "item": "railcraft:red_nether|5",
+      "emc": 50
+    },
+    {
+      "item": "railcraft:andesite|5",
+      "emc": 16
+    },
+    {
+      "item": "railcraft:diorite|5",
+      "emc": 16
+    },
+    {
+      "item": "railcraft:granite|5",
+      "emc": 16
+    },
+    {
+      "item": "railcraft:pearlized|0",
+      "emc": 129
+    },
+    {
+      "item": "railcraft:pearlized|1",
+      "emc": 129
+    },
+    {
+      "item": "railcraft:pearlized|2",
+      "emc": 129
+    },
+    {
+      "item": "railcraft:pearlized|5",
+      "emc": 129
+    },
+    {
+      "item": "additionalpipes:dog_deaggravator|0",
+      "emc": 0
+    },
+    {
+      "item": "plethora:module|1",
+      "emc": 0
+    },
+    {
+      "item": "railcraft:coke_oven_red|0",
+      "emc": 0
+    },
+    {
+      "item": "teslacorelib:base_addon|0",
+      "emc": 0
+    },
+    {
+      "item": "zettaindustries:rfmeterblock|0",
+      "emc": 0
+    },
+    {
+      "item": "teslacorelib:wrench|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.0|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.0|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.0|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.0|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.1|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.1|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.1|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.1|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.2|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.2|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.2|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.2|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.3|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.3|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.3|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.3|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.4|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.4|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.4|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.4|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.5|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.5|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.5|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.5|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.6|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.6|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.6|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.6|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.7|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.7|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.7|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.7|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.8|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.8|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.8|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.8|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.9|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.9|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.9|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:logs.fireproof.9|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|4",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|5",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|14",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|6",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|7",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|8",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|9",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|10",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|11",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|12",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|13",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.0|15",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|3",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|4",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|5",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|6",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|7",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|8",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|9",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|10",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|11",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|12",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|13",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|14",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.1|15",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.2|0",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.2|1",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.2|2",
+      "emc": 0
+    },
+    {
+      "item": "extratrees:planks.fireproof.2|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.0|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.0|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.0|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.0|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.1|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.1|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.1|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.1|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.2|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.2|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.2|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.2|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.3|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.3|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.3|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.3|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.4|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.4|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.4|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.4|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.5|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.5|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.5|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.5|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.6|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.6|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.6|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.6|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.fireproof.7|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.vanilla.fireproof.0|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.vanilla.fireproof.0|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.vanilla.fireproof.0|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.vanilla.fireproof.0|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.vanilla.fireproof.1|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:logs.vanilla.fireproof.1|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|4",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|5",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|6",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|7",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|8",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|9",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|10",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|11",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|12",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|13",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|14",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.0|15",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|4",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|5",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|6",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|7",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|8",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|9",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|10",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|11",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.fireproof.1|12",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.vanilla.fireproof.0|0",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.vanilla.fireproof.0|1",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.vanilla.fireproof.0|2",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.vanilla.fireproof.0|3",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.vanilla.fireproof.0|4",
+      "emc": 0
+    },
+    {
+      "item": "forestry:planks.vanilla.fireproof.0|5",
+      "emc": 0
+    }
+  ]
+}

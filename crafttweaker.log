@@ -1,0 +1,175 @@
+[PREINITIALIZATION][SERVER][INFO] Thank you to the Patreon supporters below and others who make CraftTweaker possible!
+AdaraChristine
+DreamThorn
+Phillip Swearingain
+Luvely
+Genryu
+BrÃƒÂ¸nsted
+SquidDev
+Quaternary
+Peregrinus11
+Pongo Sapiens
+Jessie Sims
+Belathus
+WaterMoon
+Zuniroa
+Riley
+Spencer Gilbert
+Hooley
+NickT
+Ncc1702
+Ivy_
+If you want to support the mod, checkout https://patreon.com/jaredlll08?s=crtmod
+
+[PREINITIALIZATION][SERVER][INFO] Current loaders after merging: [[preinit]]
+[PREINITIALIZATION][SERVER][INFO] Loading scripts for loader with names [preinit]
+[PREINITIALIZATION][SERVER][INFO] [preinit | SIDE_SERVER]: Skipping file {[0:crafttweaker]: tekkit2.zs} as we are currently loading with a different loader
+[PREINITIALIZATION][SERVER][INFO] Completed script loading in: 3ms
+[INITIALIZATION][SERVER][INFO] CraftTweaker: Building registry
+[INITIALIZATION][SERVER][INFO] CraftTweaker: Successfully built item registry
+[INITIALIZATION][SERVER][INFO] Current loaders after merging: [[preinit], [recipeevent | crafttweaker]]
+[INITIALIZATION][SERVER][INFO] Loading scripts for loader with names [crafttweaker | recipeevent]
+[INITIALIZATION][SERVER][INFO] [crafttweaker | SIDE_SERVER]: Loading Script: {[0:crafttweaker]: tekkit2.zs}
+[INITIALIZATION][SERVER][INFO] Adding tooltip for <akashictome:tome>.withTag({"akashictome:data": {industrialforegoing: {id: "industrialforegoing:book_manual", Count: 1 as byte, tag: {"akashictome:definedMod": "industrialforegoing"}, Damage: 0 as short}, buildcraftlib: {id: "buildcraftlib:guide", Count: 1 as byte, tag: {"akashictome:definedMod": "buildcraftlib"}, Damage: 0 as short}, projecte: {id: "projecte:item.pe_manual", Count: 1 as byte, tag: {"akashictome:definedMod": "projecte"}, Damage: 0 as short}, modularforcefieldsystem: {id: "guideapi:minecraft-mffsguide", Count: 1 as byte, tag: {"akashictome:definedMod": "modularforcefieldsystem"}, Damage: 0 as short}, logisticspipes: {id: "logisticspipes:guide_book", Count: 1 as byte, tag: {"akashictome:definedMod": "logisticspipes"}, Damage: 0 as short}, forestry: {id: "forestry:book_forester", Count: 1 as byte, tag: {"akashictome:definedMod": "forestry"}, Damage: 0 as short}}}): "Craftable with all mod guides included"
+[INITIALIZATION][SERVER][INFO] Adding Block of Coal Coke to ore dictionary entry blockCoalCoke
+[INITIALIZATION][SERVER][INFO] Adding Charcoal Block to ore dictionary entry blockCharcoal
+[INITIALIZATION][SERVER][INFO] Adding Obsidian Dust to ore dictionary entry dustObsidian
+[INITIALIZATION][SERVER][INFO] Adding Bookshelf to ore dictionary entry bookshelf
+[INITIALIZATION][SERVER][INFO] Removing Galena Ingot from ore dictionary entry ingotLead
+[INITIALIZATION][SERVER][INFO] Removing Plastic from ore dictionary entry itemRubber
+[INITIALIZATION][SERVER][INFO] Adding tooltip for <ic2:blockcompactedgenerator:6>: "Max output: 256 RF/t"
+[INITIALIZATION][SERVER][INFO] Adding tooltip for <ic2:blockcompactedgenerator:7>: "Max output: 1024 RF/t"
+[INITIALIZATION][SERVER][INFO] Adding tooltip for <ic2:blockcompactedgenerator:8>: "Max output: 4096 RF/t"
+[INITIALIZATION][SERVER][INFO] Adding tooltip for <zettaindustries:batterycontroller>: "Multiblock structure storing RF energy"
+[INITIALIZATION][SERVER][INFO] Removing tooltip for <ic2:precisionwrench>: "Lossless uses Left:"
+[INITIALIZATION][SERVER][INFO] Adding tooltip for <ic2:itemtoolwrench>: "Not lossless"
+[INITIALIZATION][SERVER][INFO] Adding Extractor entiesRubber Wood
+[INITIALIZATION][SERVER][INFO] Translating item.itemAdvancedSolarHelmet.name to Compacted Solar Helmet
+[INITIALIZATION][SERVER][INFO] Translating tile.railcraft.manipulator.loader.ic2.name to IC2 EU Loader
+[INITIALIZATION][SERVER][INFO] Translating tile.railcraft.manipulator.unloader.ic2.name to IC2 EU Unloader
+[INITIALIZATION][SERVER][INFO] Completed script loading in: 429ms
+[POSTINITIALIZATION][SERVER][INFO] Removing recipes for various outputs
+[POSTINITIALIZATION][SERVER][INFO] Removing Shapeless recipes for <galacticraftcore:prelaunch_checklist>
+[POSTINITIALIZATION][SERVER][INFO] Removing 1 Shapeless recipes.
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "quark:hopper"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:gold_ingot_from_block"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:iron_ingot_from_block"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:diamond"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:emerald"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:redstone"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "zettaindustries:coal_from_charcoal_block"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "zettaindustries:charcoal_block_from_coal"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "forestry:charcoal"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "forestry:charcoal_block"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "quark:coal"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "quark:charcoal_block"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "chisel:charcoal"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "railcraft:fuel_coke$1"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:blocks/barrel"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "ic2:shaped_item.charcoal_-1261499980"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "zettaindustries:sulfur_blaze"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "industrialforegoing:black_hole_controller_reworked_black_hole_controller_deprecated"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "railcraft:gear#1$1"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "railcraft:gear#4$1"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "railcraft:gear#3$2"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "railcraft:forestry_sturdy_machine$1"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-expansion:device/teleposer"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-expansion:items/jetpack"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "akashictome:tome"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "irontanks:diamond_emerald_tank"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "irontanks:diamond_emerald_upgrade"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "galacticraftcore:basic_item_5"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "hammercore:manual"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "hammercore:cableflux_recipescf.0"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "hammercore:cableflux_recipescf.1"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "hammercore:cableflux_recipescf.2"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "ic2:shaped_tile.pistonstickybase_1809078030"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "industrialforegoing:infinity_drill_0"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:purple_shulker_box"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:orange_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:magenta_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:light_blue_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:yellow_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:lime_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:pink_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:gray_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:light_gray_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:cyan_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:purple_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:blue_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:brown_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:green_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:red_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "minecraft:black_wool"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/ruby_helmet"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/ruby_chestplate"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/ruby_leggings"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/ruby_boots"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/sapphire_helmet"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/sapphire_chestplate"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/sapphire_leggings"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/sapphire_boots"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/peridot_helmet"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/peridot_chestplate"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/peridot_leggings"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projectred-exploration:armor/peridot_boots"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_white"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_orange"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_magenta"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_light_blue"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_yellow"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_lime"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_pink"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_gray"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_light_gray"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_cyan"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_purple"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_blue"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_brown"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_green"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_red"
+[POSTINITIALIZATION][SERVER][INFO] Removing recipe with name "projecte:conversions/dye_bag_black"
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Akashic Tome with name ct_shapeless-1753670238
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Pre-Launch Checklist with name ct_shapeless1026837510
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Aluminum Wire with name ct_shaped-779832944
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Heavy Aluminum Wire with name ct_shapeless457497368
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Nature's Compass with name ct_shaped-845108849
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Nuke with name ct_shaped-1311890616
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Precision Wrench with name ct_shaped125202136
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Precision Wrench with name ct_shaped1635153179
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Iron Plate with name ct_shaped-589413748
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Force Power Crystal with name ct_shaped2142822201
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Forcicium Cell with name ct_shaped-1625790586
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Upgrade: Focus Matrix with name ct_shaped-249285129
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for MFFS Control System with name ct_shaped-1762098875
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for MFFS Secure Storage with name ct_shaped1018829200
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Diagnonal Wall Module with name ct_shaped622703650
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Sphere with name ct_shaped1785648528
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Cube with name ct_shaped-990938328
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Wall with name ct_shaped1480658919
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Deflector with name ct_shaped-710943332
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Tube with name ct_shaped1120108086
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Containment with name ct_shaped-1761615921
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Projector Module: Advanced Cube with name ct_shaped1506082480
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Chunk Loader with name ct_shaped-1399026385
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for IC2 Sensor Kit with name ct_shaped-951424281
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for Ash Brick Stairs with name ct_shaped-604323933
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for IC2 EU Loader with name ct_shaped651785303
+[POSTINITIALIZATION][SERVER][INFO] Adding shaped recipe for IC2 EU Unloader with name ct_shaped-2146863562
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (White) with name ct_shapeless-1754056047
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Orange) with name ct_shapeless-1512595087
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Magenta) with name ct_shapeless-849577143
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Light Blue) with name ct_shapeless-612728271
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Yellow) with name ct_shapeless-691228972
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Lime) with name ct_shapeless-1423904620
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Pink) with name ct_shapeless-644079404
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Gray) with name ct_shapeless-2041773472
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Light Gray) with name ct_shapeless-1056160513
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Cyan) with name ct_shapeless1918048606
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Purple) with name ct_shapeless214003207
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Blue) with name ct_shapeless-1523407548
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Brown) with name ct_shapeless1695008463
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Green) with name ct_shapeless727593693
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Red) with name ct_shapeless-1493361492
+[POSTINITIALIZATION][SERVER][INFO] Adding shapeless recipe for Alchemical Bag (Black) with name ct_shapeless553627483
+[POSTINITIALIZATION][SERVER][INFO] Adding furnace recipe for <galacticraftcore:basic_block_core:8>
